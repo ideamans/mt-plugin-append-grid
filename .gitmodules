@@ -1,0 +1,3 @@
+[submodule "mt-static/plugins/AppendGrid/jquery.appendGrid"]
+	path = mt-static/plugins/AppendGrid/jquery.appendGrid
+	url = git@github.com:hkalbertl/jquery.appendGrid.git
