@@ -53,6 +53,7 @@ customfield_types:
               { 'Album': 'Reflection', 'Artist': 'Kelly Chen', 'Year': '2013', 'Price': 138.2 }
           ]
       }
+    validate: $AppendGrid::MT::AppendGrid::CustomFields::append_grid_with_json_validate
     column_def: vclob
     no_default: 1
     order: 2000

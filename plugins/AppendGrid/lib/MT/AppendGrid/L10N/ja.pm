@@ -11,6 +11,10 @@ use vars qw( %Lexicon );
 	'Adds grid customfield type with appendGrid.' => 'appendGridによるグリッドテーブルのカスタムフィールドを追加します。',
     'Grid Table with appendGrid configured by JSON' => 'appendGrid グリッドテーブル(JSON設定)',
 
+## lib/MT/AssetGrid/CustomFields.pm
+    'JSON is not parsable because [_1]: [_2]' => '解析できないJSONデータです(理由: [_1]): [_2]',
+    'JSON data must be an array of hash: [_1]' => 'JSONデータはハッシュの配列である必要があります: [_1]',
+
 ## tmpl/append_grid_with_json
     'Append' => '追加',
     'Remove Last' => '最後を削除',
