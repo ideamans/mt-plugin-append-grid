@@ -57,3 +57,8 @@ customfield_types:
     column_def: vclob
     no_default: 1
     order: 2000
+
+applications:
+  cms:
+    callbacks:
+      template_param.asset_insert: $AppendGrid::MT::AppendGrid::CMS::asset_insert_param

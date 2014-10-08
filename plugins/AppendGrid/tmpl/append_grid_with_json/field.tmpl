@@ -2,7 +2,29 @@
     <link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery-ui/jquery-ui.min.css?v=<mt:var name='plugin_version'>" type="text/css" />
     <link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery.appendGrid/jquery.appendGrid-1.4.2.min.css?v=<mt:var name='plugin_version'>" type="text/css" />
     <link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/AppendGrid/mt-append-grid.css?v=<mt:var name='plugin_version'>" type="text/css" />
-    <script src="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery.appendGrid/jquery.appendGrid-1.4.2.min.js?v=<mt:var name='plugin_version'>" type="text/javascript"></script>
+
+    <script src="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery.appendGrid/jquery.appendGrid-1.4.2.js?v=<mt:var name='plugin_version'>" type="text/javascript"></script>
+    <script src="<$mt:var name="static_uri"$>plugins/AppendGrid/mt-append-grid.js?v=<mt:var name='plugin_version'>" type="text/javascript"></script>
+
+    <script type="text/javascript">
+        (function($) {
+            $.mtAppendGrid.i18n = $.extend($.mtAppendGrid.i18n, {
+                append: '<__trans phrase="Append">',
+                removeLast: '<__trans phrase="Remove Last">',
+                insert: '<__trans phrase="Insert Above">',
+                remove: '<__trans phrase="Remove">',
+                moveUp: '<__trans phrase="Move Up">',
+                moveDown: '<__trans phrase="Move Down">',
+                rowDrag: '<__trans phrase="Move Row With Drag & Drop">',
+                rowEmpty: '<__trans phrase="No Rows">',
+                'Select': '<__trans phrase="Select">',
+                'Remove': '<__trans phrase="Remove">'
+            });
+
+            $.mtAppendGrid.selectAssetUrlBase = "<mt:var name="script_url">?__mode=list_asset&amp;_type=asset&amp;blog_id=<mt:var name="blog_id">&amp;dialog_view=1&amp;asset_select=1";
+
+        })(jQuery);
+    </script>
 </mt:unless>
 
 <textarea name="<mt:var name="field_name" escape="html">" id="<mt:var name="field_id">" class="text high"><mt:var name="field_value" escape="html" /></textarea>
@@ -12,62 +34,14 @@
 </div>
 
 <script>
-    (function() {
-        var $ = jQuery;
-        var $input = $('#<mt:var name="field_id">');
-
+    (function($) {
         $(function() {
-            try {
-                var defaults = {
-                    initRows: 3,
-                    rowDragging: true,
-                    hideButtons: { moveUp: true, moveDown: true },
-                    i18n: {
-                        append: '<__trans phrase="Append">',
-                        removeLast: '<__trans phrase="Remove Last">',
-                        insert: '<__trans phrase="Insert Above">',
-                        remove: '<__trans phrase="Remove">',
-                        moveUp: '<__trans phrase="Move Up">',
-                        moveDown: '<__trans phrase="Move Down">',
-                        rowDrag: '<__trans phrase="Move Row With Drag & Drop">',
-                        rowEmpty: '<__trans phrase="No Rows">'
-                    }
-                };
-
-                var forces = {};
-                var options = <mt:var name="options">;
-
-                <mt:if name="field_value">
-                var data = JSON.parse("<mt:var name="field_value" escape="js" />");
-                if ( typeof data == 'string' ) { data = JSON.parse(data); }
-                if ( data && data instanceof Array ) { options.initData = data; }
-                </mt:if>
-
-                var opts = $.extend(defaults, options, forces);
-                var $grid = $('#<mt:var name="field_id">-grid-table').appendGrid(opts);
-
-                $grid
-                    .closest('form').submit(function() {
-                        var value = $grid.appendGrid('getAllValue');
-                        var json = JSON.stringify(value);
-
-                        try {
-                            var str = JSON.parse(json);
-                            if ( typeof str == 'string' ) { json = str; }
-                        } catch (ex) {}
-
-                        $input.val(json);
-                        return true;
-                    });
-
-                $input.addClass('hidden');
-            } catch(ex) {
-                if ( console ) {
-                    console.log(ex);
-                } else {
-                    alert(ex.message || ex);
-                }
-            }
+            $.mtAppendGrid.safeSetupGrid({
+                options: <mt:var name="options" _default="{}">,
+                forces: {},
+                grid: $('#<mt:var name="field_id">-grid-table'),
+                input: $('#<mt:var name="field_id">')
+            });
         });
-    })();
+    })(jQuery);
 </script>
