@@ -62,3 +62,16 @@ applications:
   cms:
     callbacks:
       template_param.asset_insert: $AppendGrid::MT::AppendGrid::CMS::asset_insert_param
+
+tags:
+  block:
+    AppendGrid: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGrid
+    AppendGridColumns: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridColumns
+    AppendGridRows: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRows
+    AppendGridRow: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRow
+    AppendGridCellAsset: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCellAsset
+    AppendGridHeader?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridHeader
+    AppendGridFooter?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridFooter
+  function:
+    AppendGridColumn: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridColumn
+    AppendGridCell: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCell
