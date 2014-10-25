@@ -11,6 +11,15 @@ use vars qw( %Lexicon );
 	'Adds grid customfield type with appendGrid.' => 'appendGridによるグリッドテーブルのカスタムフィールドを追加します。',
     'Grid Table with appendGrid configured by JSON' => 'appendGrid グリッドテーブル(JSON設定)',
 
+## lib/MT/AppendGrid/Schema.pm
+    'AppendGrid Schema' => 'AppendGridスキーマ',
+    'AppendGrid Schemas' => 'AppendGridスキーマ',
+    '[_1] is not in a JSON format.' => '[_1]はJSON形式ではありません。',
+    'Schema YAML or JSON is malformed.' => 'スキーマがYAMLまたはJSONの形式として正しくありません。',
+
+## lib/MT/AppendGrid/CMS/Schema.pm
+    'Name is required.' => '名前は必須項目です。',
+
 ## lib/MT/AssetGrid/CustomFields.pm
     'JSON is not parsable because [_1]: [_2]' => '解析できないJSONデータです(理由: [_1]): [_2]',
     'JSON data must be an array of hash: [_1]' => 'JSONデータはハッシュの配列である必要があります: [_1]',
@@ -41,6 +50,16 @@ use vars qw( %Lexicon );
     'Move Down' => '下に移動',
     'Move Row With Drag & Drop' => 'ドラッグ＆ドロップで行を移動',
     'No Row' => '行がありません',
+
+## tmpl/cms/edit_append_grid_schema.tmpl
+    'Edit AppendGrid Schema' => 'AppendGridスキーマの編集',
+    'Create AppendGrid Schema' => 'AppendGridスキーマの作成',
+    'Schema JSON' => 'スキーマJSON',
+    'Schema YAML' => 'スキーマYAML',
+    'Save changes to this schema (s)' => 'このスキーマを保存する',
+
+## tmpl/cms/list_append_grid_schema.tmpl
+    'The schema has been deleted from the database.' => 'スキーマが削除されました。',
 );
 
 1;
