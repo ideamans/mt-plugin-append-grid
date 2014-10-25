@@ -118,8 +118,6 @@ sub set_values {
         }
     }
 
-    pp $values;
-
     $obj->SUPER::set_values(@_);
 }
 

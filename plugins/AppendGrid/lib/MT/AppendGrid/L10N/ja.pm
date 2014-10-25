@@ -26,12 +26,14 @@ use vars qw( %Lexicon );
 
 ## lib/MT/AppendGrid/Tag.pm
     'AppendGrid Customfield which basename is "[_1]" is not found.' => '"[_1]"というベースネームのカスタムフィールドは存在しません。',
-    'AppendGrid Customfield which basename is [_1] has no JSON hash options.' => '"[_1]"というベースネームのカスタムフィールドのオプションはJSON形式ではないか、ハッシュデータではありません。',
-    'AppendGrid Customfield which basename is [_1] has no columns array in options.' => '"[_1]"というベースネームのカスタムフィールドのオプションにcolumns配列がありません。',
-    'AppendGrid Customfield which basename is [_1] has invalid column in columns.' => '"[_1]"というベースネームのカスタムフィールドの列定義にハッシュではない値が含まれています。',
-    'AppendGrid Customfield which basename is [_1] has column without name in columns.' => '"[_1]"というベースネームのカスタムフィールドの列定義にname値を持たない列が含まれています。',
+    'AppendGrid Customfield has no JSON hash schema.' => 'AppendGridのスキーマがJSON形式ではないか、ハッシュデータではありません。',
+    'AppendGrid Customfield has no columns array in schema.' => 'AppendGridのスキーマにcolumns配列がありません。',
+    'AppendGrid has invalid column definision in columns.' => 'AppendGridのスキーマの列定義にハッシュではない列が含まれています。',
+    'AppendGrid has column without name in column definition.' => 'AppendGridのスキーマの列定義にname値を持たない列が含まれています。',
     'AppendGrid data is not JSON format.' => 'AppendGridデータがJSON形式ではありません。',
     'AppendGrid data is not an array of hash.' => 'AppendGridデータがハッシュ配列ではありません。',
+    'Use mt:[_1] tag with col attribute or inside mt:AppendGridColumns.'
+        => 'mt:[_1]テンプレートタグは、colまたはcolumn属性を指定するか、mt:AppendGridColumnsテンプレートタグの内部で使用してください。',
     'No AppendGrid schema context. Set AppendGrid customfield basename as basename attribute of AppendGridColumns or AppendGrid template tag.'
         => 'AppendGridスキーマがコンテキストにありません。mt:AppendGridColumnsまたは上位のmt:AppendGridテンプレートタグにbasename属性としてAppendGridカスタムフィールドのベースネームを指定してください。',
     'No AppendGrid data context. Set AppendGrid tag as tag attribute or set JSON data as data attribute of AppendGridRows, AppendGrid template tag.'
@@ -40,6 +42,9 @@ use vars qw( %Lexicon );
     'No AppendGrid row context. Set index as row attribute of AppendGridRow template tag or use in AppendGridRows template tag.'
         => 'AppendGrid行データがコンテキストにありません。mt:AppendGridRowにrow属性として行インデックスを指定するか、AppendGridRowsテンプレートタグの内部で使用してください。',
     'No AppendGrid column context. Use in AppendGridColumns template tag.' => 'AppendGrid列情報がコンテキストにありません。mt:AppendGridColumnsテンプレートタグの内部で使用してください。',
+    'mt:[_1] template tag requires at least one of [_2] as attributes.' => 'mt:[_1]テンプレートタグは、[_2]のいずれかの属性が必要です。',
+    'No column definition named "[_1]".' => '"[_1]"というnameの列定義は存在しません。',
+    'No column indexed [_1].' => 'インデックス[_1]の列定義は存在しません。',
 
 ## tmpl/append_grid_with_json
     'Append' => '追加',
