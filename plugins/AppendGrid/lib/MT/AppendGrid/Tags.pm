@@ -2,13 +2,14 @@ package MT::AppendGrid::Tags;
 
 use strict;
 use warnings;
+use utf8;
 
 use Data::Dumper;
 use MT::Util;
 use MT::AppendGrid::Util;
 
 sub _context_schema {
-    my ( $ctx, $args ) = @_;
+    my ( $ctx, $args, $cond ) = @_;
     my $blog = $ctx->stash('blog');
     my $schema;
 
@@ -35,19 +36,19 @@ sub _context_schema {
     if ( ref $schema eq '' ) {
         # Parse as JSON
         $schema = eval { MT::Util::from_json($schema) }
-            || return $ctx->error(plugin->translate('AppendGrid Customfield which basename is [_1] has no JSON hash options.', $basename));
+            || return $ctx->error(plugin->translate('AppendGrid Customfield has no JSON hash schema.'));
     }
 
-    return $ctx->error(plugin->translate('AppendGrid Customfield which basename is [_1] has no JSON hash options.', $basename))
+    return $ctx->error(plugin->translate('AppendGrid Customfield has no JSON hash schema.'))
         if ref $schema ne 'HASH';
 
-    return $ctx->error(plugin->translate('AppendGrid Customfield which basename is [_1] has no columns array in options.', $basename))
-        if ref $schema->{hash} ne 'ARRAY';
+    return $ctx->error(plugin->translate('AppendGrid Customfield has no columns array in schema.'))
+        if ref $schema->{columns} ne 'ARRAY';
 
-    foreach my $col ( @{$schema->{hash}} ) {
-        return $ctx->error(plugin->translate('AppendGrid Customfield which basename is [_1] has invalid column in columns.', $basename))
+    foreach my $col ( @{$schema->{columns}} ) {
+        return $ctx->error(plugin->translate('AppendGrid has invalid column definision in columns.'))
             if ref $col ne 'HASH';
-        return $ctx->error(plugin->translate('AppendGrid Customfield which basename is [_1] has column without name in columns.', $basename))
+        return $ctx->error(plugin->translate('AppendGrid has column without name in column definition.'))
             unless $col->{name};
     }
 
@@ -55,7 +56,7 @@ sub _context_schema {
 }
 
 sub _context_data {
-    my ( $ctx, $args ) = @_;
+    my ( $ctx, $args, $cond ) = @_;
     my $data;
 
     if ( $args->{data} ) {
@@ -74,7 +75,7 @@ sub _context_data {
         return '';
     }
 
-    if ( ref $data ne '' ) {
+    if ( ref $data eq '' ) {
         # Parse ad JSON
         $data = eval { MT::Util::from_json($data) }
             || return $ctx->error(plugin->translate('AppendGrid data is not JSON format.'));
@@ -92,28 +93,49 @@ sub _context_data {
 }
 
 sub _require_context_schema {
+    my ( $ctx, $args, $cond ) = @_;
     defined( my $schema = _context_schema(@_) ) || return;
-    return plugin->translate('No AppendGrid schema context. Set AppendGrid customfield basename as basename attribute of AppendGridColumns or AppendGrid template tag.')
+    return $ctx->error(plugin->translate('No AppendGrid schema context. Set AppendGrid customfield basename as basename attribute of AppendGridColumns or AppendGrid template tag.'))
         unless $schema;
 
     $schema;
 }
 
 sub _require_context_data {
-    defined( my $data = _context_data($ctx, $args) ) || return;
-    return plugin->translate('No AppendGrid data context. Set AppendGrid tag as tag attribute or set JSON data as data attribute of AppendGridRows, AppendGrid template tag.')
+    my ( $ctx, $args, $cond ) = @_;
+    defined( my $data = _context_data(@_) ) || return;
+    return $ctx->error(plugin->translate('No AppendGrid data context. Set AppendGrid tag as tag attribute or set JSON data as data attribute of AppendGridRows, AppendGrid template tag.'))
         unless $data;
 
     $data;
 }
 
+sub _require_context_column {
+    my ( $ctx, $args, $cond ) = @_;
+    defined( my $schema = _require_context_schema(@_) ) || return;
+
+    my $col;
+    if ( $ctx->stash('append_grid_column') ) {
+        $col = $ctx->stash('append_grid_column');
+    } elsif ( my $name = ( $args->{col} || $args->{column} ) ) {
+        $col = ( grep { $_->{name} eq $name } @{$schema->{columns}} )[0]
+            || return $ctx->error(plugin->translate('No column definition named "[_1]".', $name));
+    } elsif ( defined ( my $index = $args->{index} ) ) {
+        $col = $schema->{columns}->[$index]
+            || return $ctx->error(plugin->translate('No column indexed [_1].', $name));
+    }
+
+    $col || return $ctx->error(plugin->translate('No AppendGrid column context. Set column, col or index attribute in [_1] or use [_1] tag inside mt:AppendGridColumns.'), $ctx->stash('tag'));
+}
+
 sub _require_context_row {
-    my ( $ctx, $args ) = @_;
-    defined( my $data = _require_context_data($ctx, $args) ) || return;
+    my ( $ctx, $args, $cond ) = @_;
+    defined( my $data = _require_context_data(@_) ) || return;
+    return '' if ref $data ne 'ARRAY';
 
     my $row;
     if ( defined $args->{row} ) {
-        $row = $data->{int($args->{row})} || return '';
+        $row = $data->[int($args->{row})] || return '';
     } elsif ( $ctx->stash('append_grid_row') ) {
         $row = $ctx->stash('append_grid_row');
     } else {
@@ -129,12 +151,16 @@ sub _require_context_row {
 sub _require_context_cell {
     my ( $ctx, $args ) = @_;
     defined( my $row = _require_context_row(@_) ) || return;
+    return '' if ref $row ne 'HASH';
 
     my $cell;
-    if ( defined( $args->{col} ) ) {
-        $cell = $row->{$args->{col}};
-    } elsif ( my $col = $ctx->stash('apend_grid_column') ) {
+    my $col;
+    if ( defined( $col = ( $args->{col} || $args->{column} ) ) ) {
+        $cell = $row->{$col};
+    } elsif ( $col = $ctx->stash('append_grid_column') ) {
         $cell = $row->{$col->{name}};
+    } else {
+        return $ctx->error(plugin->translate('Use mt:[_1] tag with col attribute or inside mt:AppendGridColumns.', $ctx->stash('tag')));
     }
 
     defined( $cell ) ? $cell : '';
@@ -149,7 +175,7 @@ sub _basic_loop {
     my $vars = $ctx->{__stash}{vars} ||= {};
     my $size = scalar @$array;
     for( my $i = 0; $i < $size; $i++ ) {
-        local $ctx->{__stash}->{$stash} = $element;
+        local $ctx->{__stash}->{$stash} = $array->[$i];
         local $vars->{__first__} = ( $i == 0 )? 1: 0;
         local $vars->{__last__} = ( $i == $size-1 )? 1: 0;
         local $vars->{__odd__} = ( $i % 2 ) == 1;
@@ -167,8 +193,8 @@ sub hdlr_AppendGrid {
     my ( $ctx, $args, $cond ) = @_;
 
     my ( $schema, $data );
-    defined( $schema = _context_schema($ctx, $args) ) || return;
-    defined( $data = _context_data($ctx, $args) ) || return;
+    defined( $schema = _context_schema(@_) ) || return;
+    defined( $data = _context_data(@_) ) || return;
 
     local $ctx->{__stash}->{append_grid_schema} = $schema;
     local $ctx->{__stash}->{append_grid_data} = $data;
@@ -182,7 +208,8 @@ sub hdlr_AppendGrid {
 
 sub hdlr_AppendGridColumns {
     my ( $ctx, $args, $cond ) = @_;
-    defined( my $schema = _require_context_schema($ctx, $args) ) || return;
+
+    defined( my $schema = _require_context_schema(@_) ) || return;
 
     local $ctx->{__stash}->{append_grid_schema} = $schema;
     _basic_loop($schema->{columns}, 'append_grid_column', @_);
@@ -190,12 +217,10 @@ sub hdlr_AppendGridColumns {
 
 sub hdlr_AppendGridColumn {
     my ( $ctx, $args ) = @_;
-
-    my $column = $ctx->stash('append_grid_column')
-        || return $ctx->error(plugin->translate('No AppendGrid column context. Use in AppendGridColumns template tag.'));
+    defined( my $column = _require_context_column(@_) ) || return;
 
     my $key = $args->{key} || $args->{attr}
-        || return $ctx->error(plugin->translate('[_1] template tag requires at least each of [_2] as attributes.', 'mt:AppendGridColumn', 'key, attr'));
+        || return $ctx->error(plugin->translate('mt:[_1] template tag requires at least one of [_2] as attributes.', $ctx->stash('tag'), 'key, attr'));
 
     my $value = $column->{$key};
     $value = '' unless defined $value;
@@ -205,7 +230,7 @@ sub hdlr_AppendGridColumn {
 
 sub hdlr_AppendGridRows {
     my ( $ctx, $args, $cond ) = @_;
-    defined( my $data = _require_context_data($ctx, $args) ) || return;
+    defined( my $data = _require_context_data(@_) ) || return;
 
     local $ctx->{__stash}->{append_grid_data} = $data;
     _basic_loop($data, 'append_grid_row', @_);
