@@ -19,6 +19,16 @@ listing_screens:
 list_properties:
     append_grid_schema: $AppendGrid::MT::AppendGrid::Schema::list_props
 
+list_actions:
+    append_grid_schema:
+        delete:
+            label: Delete
+            code: $Core::MT::CMS::Common::delete
+            mode: delete
+            order: 100
+            js_message: delete
+            button: 1
+
 content_actions:
     append_grid_schema:
         create_new:
