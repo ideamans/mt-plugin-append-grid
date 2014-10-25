@@ -5,18 +5,28 @@ use warnings;
 use MT::AppendGrid::Util;
 use MT::Request;
 
+sub _common_field_html_param {
+    my ( $tmpl_param ) = @_;
+
+    $tmpl_param->{plugin_version} = plugin->{version};
+
+    # Including css, js?
+    my $cache = MT::Request->instance->cache('append_grid') || {};
+    $tmpl_param->{append_grid_included} = $cache->{append_grid_included};
+    $cache->{append_grid_included} = 1;
+
+    MT::Request->instance->cache('append_grid', $cache);
+}
+
 sub _append_grid_params {
     my ( $format, $key, $tmpl_key, $tmpl_param ) = @_;
 
     # pp $tmpl_param;
     if ( $tmpl_key eq 'field_html' ) {
-        $tmpl_param->{plugin_version} = plugin->{version};
+        _common_field_html_param($tmpl_param);
 
-        # Including css, js?
-        my $cache = MT::Request->instance->cache('append_grid') || {};
-        $tmpl_param->{append_grid_included} = $cache->{append_grid_included};
-        $cache->{append_grid_included} = 1;
-        MT::Request->instance->cache('append_grid', $cache);
+        # YAML to JSON
+        my $tmpl_param->{options} = yaml2json($tmpl_param->{options});
     } elsif ( $tmpl_key eq 'options_field' ) {
         unless ( $tmpl_param->{id} ) {
             my $key = "_default_options_$format";
@@ -34,6 +44,33 @@ sub append_grid_with_json_params {
 
 sub append_grid_with_yaml_params {
     _append_grid_params('yaml', @_);
+}
+
+sub append_grid_schema_params {
+    my ( $key, $tmpl_key, $tmpl_param ) = @_;
+
+    if ( $tmpl_key eq 'field_html' ) {
+        _common_field_html_param($tmpl_param);
+
+        if ( my $append_field_schema = MT->model('append_grid_schema')->load($tmpl_param->{options} || 0) ) {
+            $tmpl_param->{options} = $append_field_schema->schema_json;
+        }
+    } elsif ( $tmpl_key eq 'options_field' ) {
+        my $app = MT->instance;
+        my @blog_ids = $app->can('blog') && $app->blog ? ( $app->blog->id ) : ();
+        push @blog_ids, 0;
+
+        my @append_grid_schemas = MT->model('append_grid_schema')->load({blog_id => \@blog_ids});
+
+        my $options = $tmpl_param->{options} || '';
+        $tmpl_param->{append_grid_schemas} = [ map {
+            {
+                label       => $_->name,
+                value       => $_->id,
+                selected    => $_->id eq $options ? 1 : 0,
+            }
+        } @append_grid_schemas ];
+    }
 }
 
 sub append_grid_validate {

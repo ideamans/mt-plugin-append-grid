@@ -65,6 +65,18 @@ tags:
         AppendGridCell: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCell
 
 customfield_types:
+    append_grid_with_schema:
+        label: AppendGrid selected schema
+        column_def: vclob
+        no_default: 1
+        order: 2000
+        validate: $AppendGrid::MT::AppendGrid::CustomFields::append_grid_validate
+        field_html: |
+            <mt:Include name="tmpl/customfield/field.tmpl" component="AppendGrid" />
+        field_html_params: $AppendGrid::MT::AppendGrid::CustomFields::append_grid_schema_params
+        options_field: |
+            <mt:Include name="tmpl/customfield/schema_options.tmpl" component="AppendGrid" />
+
     append_grid_with_json:
         label: AppendGrid configured by JSON
         column_def: vclob
