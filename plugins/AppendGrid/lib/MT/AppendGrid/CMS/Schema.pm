@@ -6,6 +6,8 @@ use MT::AppendGrid::Util;
 
 sub edit {
     my ( $cb, $app, $id, $obj, $param ) = @_;
+
+    $obj ||= MT->model('append_grid_schema')->new;
     $app->setup_editor_param($param);
     $param->{schema_format} ||= 'yaml';
 
