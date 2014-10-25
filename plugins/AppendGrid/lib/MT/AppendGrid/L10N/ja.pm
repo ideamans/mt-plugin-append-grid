@@ -9,7 +9,8 @@ use vars qw( %Lexicon );
 
 ## config.yaml
 	'Adds grid customfield type with appendGrid.' => 'appendGridによるグリッドテーブルのカスタムフィールドを追加します。',
-    'Grid Table with appendGrid configured by JSON' => 'appendGrid グリッドテーブル(JSON設定)',
+    'AppendGrid configured by JSON' => 'appendGrid グリッドテーブル(JSON設定)',
+    'AppendGrid configured by YAML' => 'appendGrid グリッドテーブル(YAML設定)',
 
 ## lib/MT/AppendGrid/Schema.pm
     'AppendGrid Schema' => 'AppendGridスキーマ',

@@ -5,9 +5,10 @@ use warnings;
 use MT::AppendGrid::Util;
 use MT::Request;
 
-sub append_grid_with_json_params {
-    my ( $key, $tmpl_key, $tmpl_param ) = @_;
+sub _append_grid_params {
+    my ( $format, $key, $tmpl_key, $tmpl_param ) = @_;
 
+    # pp $tmpl_param;
     if ( $tmpl_key eq 'field_html' ) {
         $tmpl_param->{plugin_version} = plugin->{version};
 
@@ -16,12 +17,26 @@ sub append_grid_with_json_params {
         $tmpl_param->{append_grid_included} = $cache->{append_grid_included};
         $cache->{append_grid_included} = 1;
         MT::Request->instance->cache('append_grid', $cache);
+    } elsif ( $tmpl_key eq 'options_field' ) {
+        unless ( $tmpl_param->{id} ) {
+            my $key = "_default_options_$format";
+            my $options = plugin->translate("_default_options_$format");
+            $tmpl_param->{options} = plugin->translate("_default_options_$format");
+        }
     }
 
     1;
 }
 
-sub append_grid_with_json_validate {
+sub append_grid_with_json_params {
+    _append_grid_params('json', @_);
+}
+
+sub append_grid_with_yaml_params {
+    _append_grid_params('yaml', @_);
+}
+
+sub append_grid_validate {
     my ( $value ) = @_;
     my $app = MT->instance;
 
