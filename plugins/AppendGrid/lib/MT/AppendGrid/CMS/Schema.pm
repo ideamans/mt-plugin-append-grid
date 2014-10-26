@@ -6,6 +6,16 @@ use MT::AppendGrid::Util;
 
 sub edit {
     my ( $cb, $app, $id, $obj, $param ) = @_;
+    return $app->permission_denied
+        unless $app->permissions->can_do('edit_custom_fields');
+    my $blog_id = $app->can('blog') && $app->blog ? $app->blog->id : 0;
+
+    $param->{preview_url} = $app->uri(
+        mode => 'preview_append_grid',
+        args => {
+            blog_id => $blog_id,
+        },
+    );
 
     $obj ||= MT->model('append_grid_schema')->new;
     $app->setup_editor_param($param);
@@ -18,8 +28,33 @@ sub edit {
         'tmpl', 'cms', 'edit_append_grid_schema.tmpl' );
 }
 
+sub preview {
+    my ( $app ) = @_;
+    return $app->permission_denied
+        unless $app->permissions->can_do('edit_custom_fields');
+
+    my $schema_format = $app->param('schema_format');
+    my $schema = MT->model('append_grid_schema')->new;
+    $schema->set_values({
+        schema_format   => $app->param('schema_format'),
+        schema_json     => $app->param('schema_json'),
+        schema_yaml     => $app->param('schema_yaml'),
+    });
+
+    if ( $schema->validate ) {
+        $app->json_result({
+            schema => $schema->schema_hash
+        });
+    } else {
+        $app->json_error($schema->errstr);
+    }
+}
+
 sub save_filter {
     my ( $cb, $app ) = @_;
+    return $app->permission_denied
+        unless $app->permissions->can_do('edit_custom_fields');
+
     my %values = $app->param_hash;
 
     my $name = $app->param('name');
@@ -35,6 +70,9 @@ sub save_filter {
 
 sub pre_save {
     my ( $cb, $app, $obj ) = @_;
+    return $app->permission_denied
+        unless $app->permissions->can_do('edit_custom_fields');
+
     my $schema_json = $app->param('schema_json');
     my $schema_yaml = $app->param('schema_yaml');
 

@@ -35,7 +35,7 @@
             });
 
             // Data
-            var value = $input.val();
+            var value = $input ? $input.val() : '';
             if ( value != '' ) {
                 var data = JSON.parse(value);
                 if ( typeof data == 'string' ) { data = JSON.parse(data); }
@@ -56,12 +56,14 @@
                     if ( typeof str == 'string' ) { json = str; }
                 } catch (ex) {}
 
-                $input.val(json);
+                if ( $input )
+                    $input.val(json);
                 return true;
             });
 
             // Hide textarea
-            $input.addClass('hidden');
+            if ( $input )
+                $input.addClass('hidden');
         },
         getAsset: function(id) {
             var $wrapper = $('#' + id);

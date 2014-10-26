@@ -1,9 +1,9 @@
 <mt:unless name="append_grid_included">
     <link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery-ui/jquery-ui.min.css?v=<mt:var name='plugin_version'>" type="text/css" />
-    <link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery.appendGrid/jquery.appendGrid-1.4.2.min.css?v=<mt:var name='plugin_version'>" type="text/css" />
+    <link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery.appendGrid/jquery.appendGrid-1.5.0.min.css?v=<mt:var name='plugin_version'>" type="text/css" />
     <link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/AppendGrid/mt-append-grid.css?v=<mt:var name='plugin_version'>" type="text/css" />
 
-    <script src="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery.appendGrid/jquery.appendGrid-1.4.2.js?v=<mt:var name='plugin_version'>" type="text/javascript"></script>
+    <script src="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery.appendGrid/jquery.appendGrid-1.5.0.js?v=<mt:var name='plugin_version'>" type="text/javascript"></script>
     <script src="<$mt:var name="static_uri"$>plugins/AppendGrid/mt-append-grid.js?v=<mt:var name='plugin_version'>" type="text/javascript"></script>
 
     <script type="text/javascript">
@@ -36,7 +36,7 @@
 <script>
     (function($) {
         $(function() {
-            $.mtAppendGrid.safeSetupGrid({
+            $.mtAppendGrid.setupGrid(args)({
                 options: <mt:var name="options" _default="{}">,
                 forces: {},
                 grid: $('#<mt:var name="field_id">-grid-table'),
