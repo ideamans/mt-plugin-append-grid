@@ -29,47 +29,29 @@ initData:
         artist: Theresa Fu
 YAML
 
-$Lexicon{_default_options_json} = <<'JSON'
+$Lexicon{_default_options_json} = <<'EOJ';
 {
-        columns: [
-                {
-                        name: 'Album',
-                        display: 'アルバム',
-                        type: 'text',
-                        ctrlAttr: { maxlength: 100 },
-                        ctrlCss: { width: '160px' }
-                },
-                {
-                        name: 'Artist',
-                        display: 'アーティスト',
-                        type: 'text',
-                        ctrlAttr: { maxlength: 100 },
-                        ctrlCss: { width: '100px'}
-                },
-                {
-                        name: 'Year',
-                        display: '発売年',
-                        type: 'text',
-                        ctrlAttr: { maxlength: 4 },
-                        ctrlCss: { width: '40px'}
-                },
-                {
-                        name: 'Price',
-                        display: '価格',
-                        type: 'text',
-                        ctrlAttr: { maxlength: 10 },
-                        ctrlCss: { width: '50px', 'text-align': 'right' },
-                        value: 0
-                }
-        ],
-        initData: [
-                { 'Album': 'Dearest', 'Artist': 'Theresa Fu', 'Year': '2009', 'Price': 168.9 },
-                { 'Album': 'To be Free', 'Artist': 'Arashi', 'Year': '2010', 'Price': 152.6 },
-                { 'Album': 'Count On Me', 'Artist': 'Show Luo', 'Year': '2012', 'Price': 306.8 },
-                { 'Album': 'Wonder Party', 'Artist': 'Wonder Girls', 'Year': '2012', 'Price': 108.6 },
-                { 'Album': 'Reflection', 'Artist': 'Kelly Chen', 'Year': '2013', 'Price': 138.2 }
-        ]
+    "columns": ~[
+        {
+            "name": "Album",
+            "display": "アルバム",
+            "type": "text",
+            "ctrlAttr": { "maxlength": 100 },
+            "ctrlCss": { "width": "160px" }
+        },
+        {
+            "name": "Artist",
+            "display": "アーティスト",
+            "type": "text",
+            "ctrlAttr": { "maxlength": 100 },
+            "ctrlCss": { "width": "100px"}
+        }
+    ~],
+    "initData": ~[
+        { "Album": "Dearest", "Artist": "Theresa Fu", "Year": "2009", "Price": 168.9 },
+        { "Album": "To be Free", "Artist": "Arashi", "Year": "2010", "Price": 152.6 }
+    ~]
 }
-JSON
+EOJ
 
 1;
