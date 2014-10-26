@@ -44,6 +44,7 @@
 </mt:setvarblock>
 
 <mt:setvarblock name="html_head" append="1">
+<mt:include name="cms/append_grid_html_head.tmpl" component="AppendGrid">
 <style type="text/css">
   #schema_yaml-field, #schema_json-field { display: none; }
 </style>
@@ -106,7 +107,14 @@
        id="schema_yaml"
        label_class="top-label"
        label="<__trans phrase="Schema YAML">">
-       <textarea name="schema_yaml" id="schema_yaml" class="text high full" rows="5"><mt:var name="schema_yaml" escape="html"></textarea>
+         <textarea name="schema_yaml" id="schema_yaml" class="text high full" rows="5"><mt:var name="schema_yaml" escape="html"></textarea>
+    </mtapp:setting>
+
+    <mtapp:setting
+      id="schema_preview"
+      label_class="no-header"
+      label="<__trans phrase='Preview'>">
+        <mt:include name="cms/append_grid_preview_component.tmpl" component="AppendGrid" preview_bootup="return jQuery.mtAppendGrid.bootupSchemaPreview(this)">
     </mtapp:setting>
 
   </mtapp:settinggroup>

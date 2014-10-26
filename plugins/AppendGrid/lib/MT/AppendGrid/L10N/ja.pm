@@ -63,9 +63,12 @@ use vars qw( %Lexicon );
     'Schema JSON' => 'スキーマJSON',
     'Schema YAML' => 'スキーマYAML',
     'Save changes to this schema (s)' => 'このスキーマを保存する',
+    'Preview this scheama (p)' => 'このスキーマをプレビューする',
 
 ## tmpl/cms/list_append_grid_schema.tmpl
     'The schema has been deleted from the database.' => 'スキーマが削除されました。',
+    'AppendGrid schema is preset table definition. You can create schema that can be shared by multiple custom fields.'
+        => 'AppendGridスキーマは、テーブル定義のプリセットです。複数のカスタムフィールドで共有することができます。',
 );
 
 1;

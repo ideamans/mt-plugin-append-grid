@@ -41,8 +41,11 @@ content_actions:
 
 applications:
     cms:
+        methods:
+            preview_append_grid: $AppendGrid::MT::AppendGrid::CMS::Schema::preview
         callbacks:
             template_param.asset_insert: $AppendGrid::MT::AppendGrid::CMS::Asset::asset_insert_param
+            template_param.edit_field: $AppendGrid::MT::AppendGrid::CustomFields::template_param_edit_field
             cms_edit.append_grid_schema: $AppendGrid::MT::AppendGrid::CMS::Schema::edit
             cms_save_filter.append_grid_schema: $AppendGrid::MT::AppendGrid::CMS::Schema::save_filter
             cms_pre_save.append_grid_schema: $AppendGrid::MT::AppendGrid::CMS::Schema::pre_save
