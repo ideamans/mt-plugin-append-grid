@@ -98,6 +98,95 @@
             $wrapper.find('.append-grid-preview').children().remove();
             $wrapper.find('.append-grid-remove-asset').addClass('hidden');
         },
+        bootupCustomFieldPreview: function(me, type) {
+            $.mtAppendGrid.bootupPreview(me, {
+                getter: function() {
+                    var data = {
+                        schema_format: type,
+                        schema_yaml: $('#options').val(),
+                        schema_json: $('#options').val(),
+                    };
+                    return data;
+                }
+            });
+        },
+        bootupSchemaPreview: function(me) {
+            $.mtAppendGrid.bootupPreview(me, {
+                getter: function() {
+                    var data = {
+                        schema_format: $('#schema_format_yaml').attr('checked') ? 'yaml' : 'json',
+                        schema_yaml: $('#schema_yaml').val(),
+                        schema_json: $('#schema_json').val(),
+                    };
+                    return data;
+                }
+            });
+        },
+        bootupPreview: function(me, options) {
+            var $button = $(me);
+            if ( $button.data('append_grid_preview_bootup') )
+                return false;
+
+            var $wrapper = $button.closest('.preview-wrapper');
+            var defaults = {
+                wrapper: $wrapper,
+                previewUrl: $button.attr('data-preview-uri'),
+                table: $wrapper.find('.preview-table'),
+                tableWrapper: $wrapper.find('.preview-table-wrapper'),
+                indicator: $wrapper.find('.preview-indicator'),
+                error: $wrapper.find('.preview-error'),
+                button: $button,
+                getter: function() { return {} }
+            };
+
+            var opts = $.extend(defaults, options);
+            $.mtAppendGrid.previewer(opts);
+
+            $button.data('append_grid_preview_bootup', true);
+        },
+        previewer: function(opts) {
+            var $table = opts.table,
+                $tableWrapper = opts.tableWrapper,
+                $indicator = opts.indicator,
+                $error = opts.error,
+                $button = opts.button;
+
+            var updatePreview = function() {
+                $table.children().remove();
+                $tableWrapper.hide();
+                $error.hide();
+                $indicator.fadeIn('fast');
+
+                var data = opts.getter();
+
+                $.post(opts.previewUrl, data)
+                    .done(function(data) {
+                        if ( data.error ) {
+                            $error.show().find('p.msg-text').text(data.error);
+                        } else if ( data.result && data.result.schema ) {
+                            try {
+                              $.mtAppendGrid.setupGrid({
+                                  options: data.result.schema,
+                                  forces: {},
+                                  grid: $table,
+                              });
+                              $tableWrapper.fadeIn('fast');
+                            } catch (ex) {
+                              if ( console ) console.log(ex);
+                              $error.show().find('p.msg-text').text(ex.message);
+                            }
+                        }
+                    })
+                    .fail(function(status, line, jqXHR) {
+                        $error.show().find('p.msg-text').text(status + " " + line);
+                    })
+                    .always(function() {
+                        $indicator.hide();
+                    });
+            };
+            $button.click(updatePreview);
+            updatePreview();
+        },
         customTypes: {
             'mt-asset': function(params) {
                 // Build custom column

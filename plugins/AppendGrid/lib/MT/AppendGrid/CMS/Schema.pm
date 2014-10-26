@@ -8,9 +8,9 @@ sub edit {
     my ( $cb, $app, $id, $obj, $param ) = @_;
     return $app->permission_denied
         unless $app->permissions->can_do('edit_custom_fields');
-    my $blog_id = $app->can('blog') && $app->blog ? $app->blog->id : 0;
 
-    $param->{preview_url} = $app->uri(
+    my $blog_id = $app->can('blog') && $app->blog ? $app->blog->id : 0;
+    $param->{append_grid_preview_url} = $app->uri(
         mode => 'preview_append_grid',
         args => {
             blog_id => $blog_id,

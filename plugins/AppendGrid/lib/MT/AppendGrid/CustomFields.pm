@@ -20,6 +20,7 @@ sub _common_field_html_param {
 
 sub _append_grid_params {
     my ( $format, $key, $tmpl_key, $tmpl_param ) = @_;
+    my $app = MT->instance;
 
     # pp $tmpl_param;
     if ( $tmpl_key eq 'field_html' ) {
@@ -33,6 +34,14 @@ sub _append_grid_params {
             my $options = plugin->translate("_default_options_$format");
             $tmpl_param->{options} = plugin->translate("_default_options_$format");
         }
+
+        my $blog_id = $app->can('blog') && $app->blog ? $app->blog->id : 0;
+        $tmpl_param->{append_grid_preview_url} = $app->uri(
+            mode => 'preview_append_grid',
+            args => {
+                blog_id => $blog_id,
+            },
+        );
     }
 
     1;
@@ -100,6 +109,19 @@ sub append_grid_validate {
         unless $is_array_of_hash;
 
     $value;
+}
+
+sub template_param_edit_field {
+    my ( $cb, $app, $param, $tmpl ) = @_;
+
+    my $header = $tmpl->getElementById('header_include');
+    my $node = $tmpl->createElement('setvarblock', { name => 'html_head', append => 1 });
+    $node->innerHTML(q{
+        <mt:include name="cms/append_grid_html_head.tmpl" component="AppendGrid">
+    });
+    $tmpl->insertBefore($node, $header);
+
+    1;
 }
 
 1;

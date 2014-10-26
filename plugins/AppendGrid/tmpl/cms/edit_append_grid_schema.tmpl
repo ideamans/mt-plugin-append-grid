@@ -44,14 +44,10 @@
 </mt:setvarblock>
 
 <mt:setvarblock name="html_head" append="1">
-<link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery-ui/jquery-ui.min.css?v=<mt:var name='plugin_version'>" type="text/css" />
-<link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/AppendGrid/jquery.appendGrid/jquery.appendGrid-1.5.0.min.css?v=<mt:var name='plugin_version'>" type="text/css" />
-<link rel="stylesheet" href="<$mt:var name="static_uri"$>plugins/AppendGrid/mt-append-grid.css?v=<mt:var name='plugin_version'>" type="text/css" />
+<mt:include name="cms/append_grid_html_head.tmpl" component="AppendGrid">
 <style type="text/css">
   #schema_yaml-field, #schema_json-field { display: none; }
 </style>
-<script type="text/javascript" src="<mt:var name='static_uri'>plugins/AppendGrid/jquery.appendGrid/jquery.appendGrid-1.5.0.min.js?v=<mt:var name='plugin_version'>"></script>
-<script type="text/javascript" src="<mt:var name='static_uri'>plugins/AppendGrid/mt-append-grid.js?v=<mt:var name='plugin_version'>"></script>
 </mt:setvarblock>
 
 <mt:setvar name="screen_group" value="custom_fields" />
@@ -111,86 +107,17 @@
        id="schema_yaml"
        label_class="top-label"
        label="<__trans phrase="Schema YAML">">
-       <textarea name="schema_yaml" id="schema_yaml" class="text high full" rows="5"><mt:var name="schema_yaml" escape="html"></textarea>
+         <textarea name="schema_yaml" id="schema_yaml" class="text high full" rows="5"><mt:var name="schema_yaml" escape="html"></textarea>
     </mtapp:setting>
 
     <mtapp:setting
       id="schema_preview"
-      label_class="top-label"
+      label_class="no-header"
       label="<__trans phrase='Preview'>">
-    <img src="<mt:var name='static_uri'>images/indicator.gif" id="preview_indicator" style="display: none" />
-    <div id="preview_error" style="display: none">
-      <mtapp:statusmsg
-         id="preview_error_msg"
-         class="error"
-         can_close="0">
-         <span></span>
-      </mtapp:statusmsg>
-    </div>
-    <div class="append-grid-wrapper">
-      <table id="schema_preview" style="display: none"></table>
-    </div>
-    <div class="actions-bar actions-bar-bottom">
-      <button
-        id="update_preview"
-        type="button"
-        accesskey="p"
-        title="<__trans phrase="Preview this scheama (p)">"
-        class="action button preview"
-        ><__trans phrase="Preview"></button>
-    </div>
+        <mt:include name="cms/append_grid_preview_component.tmpl" component="AppendGrid" preview_bootup="return jQuery.mtAppendGrid.bootupSchemaPreview(this)">
     </mtapp:setting>
 
   </mtapp:settinggroup>
-
-  <script>
-  (function($) {
-    var $table = $('#schema_preview'),
-        $indicator = $('#preview_indicator'),
-        $error = $('#preview_error');
-
-    var updatePreview = function() {
-      $table.children().remove();
-      $table.hide();
-      $error.hide();
-      $indicator.fadeIn('fast');
-
-      var data = {
-        schema_format: $('#schema_format_yaml').attr('checked') ? 'yaml' : 'json',
-        schema_yaml: $('#schema_yaml').val(),
-        schema_json: $('#schema_json').val(),
-      };
-
-      $.post("<mt:var name='preview_url' escape='js'>", data)
-        .done(function(data) {
-          if ( data.error ) {
-            $error.show().find('p.msg-text').text(data.error);
-          } else if ( data.result && data.result.schema ) {
-            console.log(data.result.schema);
-            try {
-              $.mtAppendGrid.setupGrid({
-                  options: data.result.schema,
-                  forces: {},
-                  grid: $table,
-              });
-              $table.fadeIn('fast');
-            } catch (ex) {
-              if ( console ) console.log(ex);
-              $error.show().find('p.msg-text').text(ex.message);
-            }
-          }
-        })
-        .fail(function(status, line, jqXHR) {
-          $error.show().find('p.msg-text').text(status + " " + line);
-        })
-        .always(function() {
-          $indicator.hide();
-        });
-    };
-    $('#update_preview').click(updatePreview);
-    updatePreview();
-  })(jQuery);
-  </script>
 
   <mt:setvarblock name="action_buttons">
     <button
