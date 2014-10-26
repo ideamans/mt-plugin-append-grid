@@ -72,6 +72,8 @@ sub _context_data {
         $data = $ctx->tag( $tag, \%tag_args, $cond );
     } elsif ( $ctx->stash('append_grid_data') ) {
         $data = $ctx->stash('append_grid_data');
+    } elsif ( my $schema = $ctx->stash('append_grid_schema') ) {
+        $data = $schema->{initData};
     } else {
         return '';
     }
