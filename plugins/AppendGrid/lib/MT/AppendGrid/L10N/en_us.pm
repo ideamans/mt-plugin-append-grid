@@ -54,4 +54,9 @@ $Lexicon{_default_options_json} = <<'EOJ';
 }
 EOJ
 
+$Lexicon{_default_schema_template} = <<'EOT';
+<mt:AppendGrid>
+</mt:AppendGrid>
+EOT
+
 1;

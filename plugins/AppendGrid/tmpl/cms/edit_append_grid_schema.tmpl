@@ -117,6 +117,15 @@
         <mt:include name="cms/append_grid_preview_component.tmpl" component="AppendGrid" preview_bootup="return jQuery.mtAppendGrid.bootupSchemaPreview(this)">
     </mtapp:setting>
 
+    <mtapp:setting
+       id="template"
+       label_class="top-label"
+       label="<__trans phrase="Template">"
+       show_hint="1"
+       hint="<__trans phrase="This is not required. Template to build AppendGrid data with mt:AppendGridBuild tag.">">
+         <textarea name="template" id="template" class="text high full" rows="5"><mt:var name="template" escape="html"></textarea>
+    </mtapp:setting>
+
   </mtapp:settinggroup>
 
   <mt:setvarblock name="action_buttons">

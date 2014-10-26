@@ -39,7 +39,10 @@ sub lookup_schema_by_field {
     if ( $field->type eq 'append_grid_with_schema' ) {
         my $schema = MT->model('append_grid_schema')->load($field->options || 0)
             || return;
-        return $schema->schema_hash;
+
+        my $hash = $schema->schema_hash;
+        $hash->{mtTemplate} ||= $schema->template;
+        return $hash;
     } elsif ( $field->type =~ /_yaml$/ ) {
         return yaml2hash($field->options);
     } elsif ( $field->type =~ /_json$/ ) {

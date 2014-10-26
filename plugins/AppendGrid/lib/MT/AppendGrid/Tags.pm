@@ -80,6 +80,7 @@ sub _context_data {
 
     if ( ref $data eq '' ) {
         # Parse ad JSON
+        return '' if $data eq '';
         $data = eval { MT::Util::from_json($data) }
             || return $ctx->error(plugin->translate('AppendGrid data is not JSON format.'));
     }
@@ -297,6 +298,30 @@ sub hdlr_AppendGridFooter {
     $ctx->var('__last__');
 }
 
+sub hdlr_IfAppendGridCustomField {
+    my ( $ctx, $args, $cond ) = @_;
+    my $schema = _context_schema(@_);
+    $schema ? 1 : 0;
+}
 
+sub hdlr_AppendGridBuild {
+    my ( $ctx, $args ) = @_;
+    my ( $schema, $data );
+
+    local $ctx->{__stash}{append_grid_data} = $data = _context_data(@_) || return '';
+    local $ctx->{__stash}{append_grid_schema} = $schema = _context_schema(@_);
+
+    if ( $args->{module} || $args->{widget} || $args->{name} || $args->{file} || $args->{identifier} ) {
+        return $ctx->invoke_handler('include', $args );
+    } elsif ( $schema && $schema->{mtTemplate} ) {
+        my $builder = $ctx->stash('builder');
+        my $tokens = $builder->compile($ctx, $schema->{mtTemplate});
+        defined( my $res = $builder->build($ctx, $tokens) )
+            || return $ctx->error($builder->errstr);
+        return $res;
+    }
+
+    '';
+}
 
 1;

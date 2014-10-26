@@ -17,12 +17,18 @@ sub edit {
         },
     );
 
-    $obj ||= MT->model('append_grid_schema')->new;
     $app->setup_editor_param($param);
-    $param->{schema_format} ||= 'yaml';
 
-    $param->{schema_yaml} = $obj->schema_yaml;
-    $param->{schema_json} = $obj->schema_json;
+    $param->{schema_format} ||= 'yaml';
+    if ( $obj ) {
+        $param->{schema_yaml} = $obj->schema_yaml;
+        $param->{schema_json} = $obj->schema_json;
+    } else {
+        my $yaml = plugin->translate('_default_options_yaml');
+        $param->{schema_yaml} = $yaml;
+        $param->{schema_json} = yaml2json($yaml);
+        $param->{template} = plugin->translate('_default_schema_template');
+    }
 
     $param->{output} = File::Spec->catfile( plugin->{full_path},
         'tmpl', 'cms', 'edit_append_grid_schema.tmpl' );

@@ -65,6 +65,7 @@ use vars qw( %Lexicon );
     'Schema YAML' => 'スキーマYAML',
     'Save changes to this schema (s)' => 'このスキーマを保存する',
     'Preview this scheama (p)' => 'このスキーマをプレビューする',
+    'This is not required. Template to build AppendGrid data with mt:AppendGridBuild tag.' => '任意項目です。mt:AppendGridBuildテンプレートタグでこのAppendGridに入力されたデータを再構築するテンプレートです。',
 
 ## tmpl/cms/list_append_grid_schema.tmpl
     'The schema has been deleted from the database.' => 'スキーマが削除されました。',

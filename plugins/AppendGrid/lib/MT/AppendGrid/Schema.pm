@@ -15,6 +15,7 @@ __PACKAGE__->install_properties(
             'description' => 'text',
             'schema_format' => 'string(16)',
             'schema' => 'text',
+            'template' => 'text',
         },
         indexes => {
             blog_id  => 1,

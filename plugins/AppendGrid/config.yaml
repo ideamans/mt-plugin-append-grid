@@ -1,7 +1,7 @@
 id: AppendGrid
 name: AppendGrid
 version: 0.10
-schema_version: 0.04
+schema_version: 0.05
 l10n_class: MT::AppendGrid::L10N
 description: <__trans phrase="Adds grid customfield type with appendGrid.">
 
@@ -73,9 +73,11 @@ tags:
         AppendGridCellAsset: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCellAsset
         AppendGridHeader?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridHeader
         AppendGridFooter?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridFooter
+        IfAppendGridCustomField?: $AppendGrid::MT::AppendGrid::Tags::hdlr_IfAppendGridCustomField
     function:
         AppendGridColumn: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridColumn
         AppendGridCell: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCell
+        AppendGridBuild: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridBuild
 
 customfield_types:
     append_grid_with_schema:
