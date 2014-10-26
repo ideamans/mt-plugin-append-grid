@@ -1,0 +1,7 @@
+<select name="options" class="select">
+    <mt:loop name="append_grid_schemas">
+    <option value="<mt:var name='value' escape='html'>"<mt:if name="selected"> selected="selected"</mt:if>>
+        <mt:var name='label' escape='html'>
+    </option>
+    </mt:loop>
+</select>

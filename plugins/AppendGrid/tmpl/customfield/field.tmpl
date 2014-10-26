@@ -1,0 +1,42 @@
+<mt:unless name="append_grid_included">
+    <mt:include name="cms/append_grid_html_head.tmpl" component="AppendGrid">
+
+    <script type="text/javascript">
+        (function($) {
+            $.mtAppendGrid.i18n = $.extend($.mtAppendGrid.i18n, {
+                append: '<__trans phrase="Append">',
+                removeLast: '<__trans phrase="Remove Last">',
+                insert: '<__trans phrase="Insert Above">',
+                remove: '<__trans phrase="Remove">',
+                moveUp: '<__trans phrase="Move Up">',
+                moveDown: '<__trans phrase="Move Down">',
+                rowDrag: '<__trans phrase="Move Row With Drag & Drop">',
+                rowEmpty: '<__trans phrase="No Rows">',
+                'Select': '<__trans phrase="Select">',
+                'Remove': '<__trans phrase="Remove">'
+            });
+
+            $.mtAppendGrid.selectAssetUrlBase = "<mt:var name="script_url">?__mode=list_asset&amp;_type=asset&amp;blog_id=<mt:var name="blog_id">&amp;dialog_view=1&amp;asset_select=1";
+
+        })(jQuery);
+    </script>
+</mt:unless>
+
+<textarea name="<mt:var name="field_name" escape="html">" id="<mt:var name="field_id">" class="text high"><mt:var name="field_value" escape="html" /></textarea>
+
+<div class="append-grid-wrapper">
+<table id="<mt:var name="field_id" />-grid-table"></table>
+</div>
+
+<script>
+    (function($) {
+        $(function() {
+            $.mtAppendGrid.setupGrid({
+                options: <mt:var name="options" _default="{}">,
+                forces: {},
+                grid: $('#<mt:var name="field_id">-grid-table'),
+                input: $('#<mt:var name="field_id">')
+            });
+        });
+    })(jQuery);
+</script>

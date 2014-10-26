@@ -1,58 +1,117 @@
 id: AppendGrid
 name: AppendGrid
-version: 0.10
+version: 0.1.0
+schema_version: 0.05
 l10n_class: MT::AppendGrid::L10N
 description: <__trans phrase="Adds grid customfield type with appendGrid.">
 
+object_types:
+    append_grid_schema: MT::AppendGrid::Schema
+
+listing_screens:
+    append_grid_schema:
+        object_label: AppendGrid Schema
+        primary: name
+        default_sort_key: name
+        permission: administer_blog,edit_custom_fields
+        template: cms/list_append_grid_schema.tmpl
+
+list_properties:
+    append_grid_schema: $AppendGrid::MT::AppendGrid::Schema::list_props
+
+list_actions:
+    append_grid_schema:
+        delete:
+            label: Delete
+            code: $Core::MT::CMS::Common::delete
+            mode: delete
+            order: 100
+            js_message: delete
+            button: 1
+
+content_actions:
+    append_grid_schema:
+        create_new:
+            mode: view
+            args:
+                _type: append_grid_schema
+            class: icon-create
+            label: Create New
+            order: 100
+
+applications:
+    cms:
+        methods:
+            preview_append_grid: $AppendGrid::MT::AppendGrid::CMS::Schema::preview
+        callbacks:
+            template_param.asset_insert: $AppendGrid::MT::AppendGrid::CMS::Asset::asset_insert_param
+            template_param.edit_field: $AppendGrid::MT::AppendGrid::CustomFields::template_param_edit_field
+            cms_edit.append_grid_schema: $AppendGrid::MT::AppendGrid::CMS::Schema::edit
+            cms_save_filter.append_grid_schema: $AppendGrid::MT::AppendGrid::CMS::Schema::save_filter
+            cms_pre_save.append_grid_schema: $AppendGrid::MT::AppendGrid::CMS::Schema::pre_save
+        menus:
+                custom_fields:append_grid_schema:
+                    label: AppendGrid Schema
+                    order: 1000
+                    mode: list
+                    args:
+                        _type: append_grid_schema
+                    permit_action:
+                        permit_action: edit_custom_fields
+                        at_least_one: 1
+                    view:
+                        - system
+                        - website
+                        - blog
+
+tags:
+    block:
+        AppendGrid: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGrid
+        AppendGridColumns: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridColumns
+        AppendGridRows: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRows
+        AppendGridRow: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRow
+        AppendGridCellAsset: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCellAsset
+        AppendGridHeader?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridHeader
+        AppendGridFooter?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridFooter
+        IfAppendGridCustomField?: $AppendGrid::MT::AppendGrid::Tags::hdlr_IfAppendGridCustomField
+    function:
+        AppendGridColumn: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridColumn
+        AppendGridCell: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCell
+        AppendGridBuild: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridBuild
+
 customfield_types:
-  append_grid_with_json:
-    label: Grid Table with AppendGrid configured by JSON
-    field_html: |
-      <mt:Include name="tmpl/append_grid_with_json/field.tmpl" component="AppendGrid" />
-    field_html_params: $AppendGrid::MT::AppendGrid::CustomFields::append_grid_with_json_params
-    options_field: |
-      <mt:Include name="tmpl/append_grid_with_json/options.tmpl" component="AppendGrid" />
-    default_value: |
-      {
-          columns: [
-              {
-                  name: 'Album',
-                  display: 'アルバム',
-                  type: 'text',
-                  ctrlAttr: { maxlength: 100 },
-                  ctrlCss: { width: '160px' }
-              },
-              {
-                  name: 'Artist',
-                  display: 'アーティスト',
-                  type: 'text',
-                  ctrlAttr: { maxlength: 100 },
-                  ctrlCss: { width: '100px'}
-              },
-              {
-                  name: 'Year',
-                  display: '発売年',
-                  type: 'text',
-                  ctrlAttr: { maxlength: 4 },
-                  ctrlCss: { width: '40px'}
-              },
-              {
-                  name: 'Price',
-                  display: '価格',
-                  type: 'text',
-                  ctrlAttr: { maxlength: 10 },
-                  ctrlCss: { width: '50px', 'text-align': 'right' },
-                  value: 0
-              }
-          ],
-          initData: [
-              { 'Album': 'Dearest', 'Artist': 'Theresa Fu', 'Year': '2009', 'Price': 168.9 },
-              { 'Album': 'To be Free', 'Artist': 'Arashi', 'Year': '2010', 'Price': 152.6 },
-              { 'Album': 'Count On Me', 'Artist': 'Show Luo', 'Year': '2012', 'Price': 306.8 },
-              { 'Album': 'Wonder Party', 'Artist': 'Wonder Girls', 'Year': '2012', 'Price': 108.6 },
-              { 'Album': 'Reflection', 'Artist': 'Kelly Chen', 'Year': '2013', 'Price': 138.2 }
-          ]
-      }
-    column_def: vclob
-    no_default: 1
-    order: 2000
+    append_grid_with_schema:
+        label: AppendGrid selected schema
+        column_def: vclob
+        no_default: 1
+        order: 2000
+        validate: $AppendGrid::MT::AppendGrid::CustomFields::append_grid_validate
+        field_html: |
+            <mt:Include name="tmpl/customfield/field.tmpl" component="AppendGrid" />
+        field_html_params: $AppendGrid::MT::AppendGrid::CustomFields::append_grid_schema_params
+        options_field: |
+            <mt:Include name="tmpl/customfield/schema_options.tmpl" component="AppendGrid" />
+
+    append_grid_with_json:
+        label: AppendGrid configured by JSON
+        column_def: vclob
+        no_default: 1
+        order: 2100
+        validate: $AppendGrid::MT::AppendGrid::CustomFields::append_grid_validate
+        field_html: |
+            <mt:Include name="tmpl/customfield/field.tmpl" component="AppendGrid" />
+        field_html_params: $AppendGrid::MT::AppendGrid::CustomFields::append_grid_with_json_params
+        options_field: |
+            <mt:Include name="tmpl/customfield/json_options.tmpl" component="AppendGrid" />
+
+    append_grid_with_yaml:
+        label: AppendGrid configured by YAML
+        column_def: vclob
+        no_default: 1
+        order: 2200
+        validate: $AppendGrid::MT::AppendGrid::CustomFields::append_grid_validate
+        field_html: |
+            <mt:Include name="tmpl/customfield/field.tmpl" component="AppendGrid" />
+        field_html_params: $AppendGrid::MT::AppendGrid::CustomFields::append_grid_with_yaml_params
+        options_field: |
+            <mt:Include name="tmpl/customfield/yaml_options.tmpl" component="AppendGrid" />

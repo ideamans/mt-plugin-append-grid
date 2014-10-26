@@ -1,0 +1,25 @@
+<div class="preview-wrapper">
+  <img src="<$MTStaticWebPath$>images/indicator.gif" class="preview-indicator" style="display: none" />
+  <div id="preview_error" class="preview-error" style="display: none">
+    <mtapp:statusmsg
+       id="preview_error_msg"
+       class="error"
+       can_close="0">
+       <span></span>
+    </mtapp:statusmsg>
+  </div>
+  <div class="append-grid-wrapper preview-table-wrapper" style="display:none">
+    <table id="schema_preview" class="preview-table"></table>
+  </div>
+  <div class="actions-bar actions-bar-bottom">
+    <button
+      id="update_preview"
+      type="button"
+      accesskey="p"
+      title="<__trans phrase="Preview this scheama (p)">"
+      class="action button preview-button"
+      data-preview-uri="<mt:var name='append_grid_preview_url' escape='js'>"
+      onclick="<mt:var name='preview_bootup'>"
+      ><__trans phrase="Preview"></button>
+  </div>
+</div>
