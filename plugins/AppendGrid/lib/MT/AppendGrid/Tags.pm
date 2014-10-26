@@ -16,17 +16,14 @@ sub _context_schema {
     if ( $args->{schema} ) {
         $schema = $args->{schema};
     } elsif ( my $basename = $args->{basename} ) {
-        my $asset;
-
-        # Lookup in the blog at first
-        $asset = MT->model('field')->load({ blog_id => $blog->id, basename => $basename })
-            if $blog;
-        $asset ||= MT->model('field')->load({ basename => $basename });
-
-        return $ctx->error(plugin->translate('AppendGrid Customfield which basename is "[_1]" is not found.', $basename))
-            unless $asset;
-
-        $schema = $asset->options;
+        defined( $schema = lookup_schema_by_field($ctx, basename => $basename ) )
+            || return $ctx->error(plugin->translate('AppendGrid Customfield which basename is "[_1]" is not found.', $basename));
+    } elsif ( my $tag = $args->{tag} ) {
+        defined( $schema = lookup_schema_by_field($ctx, tag => $tag ) )
+            || return $ctx->error(plugin->translate('AppendGrid Customfield which tag is "[_1]" is not found.', $tag));
+    } elsif ( my $field = $ctx->stash('field') ) {
+        defined( $schema = lookup_schema_by_field($ctx, field => $field ) )
+            || return $ctx->error(plugin->translate('AppendGrid Customfield which basename is "[_1]" is not found.', $field->basename));
     } elsif ( $ctx->stash('append_grid_schema') ) {
         $schema = $ctx->stash('append_grid_schema');
     } else {
@@ -59,6 +56,10 @@ sub _context_data {
     my ( $ctx, $args, $cond ) = @_;
     my $data;
 
+    if ( my $field = $ctx->stash('field') ) {
+        $args->{tag} ||= $field->tag;
+    }
+
     if ( $args->{data} ) {
         $data = $args->{data};
     } elsif ( my $tag = $args->{tag} ) {
@@ -71,6 +72,8 @@ sub _context_data {
         $data = $ctx->tag( $tag, \%tag_args, $cond );
     } elsif ( $ctx->stash('append_grid_data') ) {
         $data = $ctx->stash('append_grid_data');
+    } elsif ( my $schema = $ctx->stash('append_grid_schema') ) {
+        $data = $schema->{initData};
     } else {
         return '';
     }

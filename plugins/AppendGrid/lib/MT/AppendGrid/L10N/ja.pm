@@ -27,6 +27,7 @@ use vars qw( %Lexicon );
 
 ## lib/MT/AppendGrid/Tag.pm
     'AppendGrid Customfield which basename is "[_1]" is not found.' => '"[_1]"というベースネームのカスタムフィールドは存在しません。',
+    'AppendGrid Customfield which tag is "[_1]" is not found.' => '"[_1]"というタグ名のカスタムフィールドは存在しません。',
     'AppendGrid Customfield has no JSON hash schema.' => 'AppendGridのスキーマがJSON形式ではないか、ハッシュデータではありません。',
     'AppendGrid Customfield has no columns array in schema.' => 'AppendGridのスキーマにcolumns配列がありません。',
     'AppendGrid has invalid column definision in columns.' => 'AppendGridのスキーマの列定義にハッシュではない列が含まれています。',
