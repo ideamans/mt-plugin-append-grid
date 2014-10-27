@@ -14,7 +14,7 @@
         setupGrid: function(args) {
             var $grid = args.grid,
                 $input = args.input,
-                options = $.extend($.mtAppendGrid.defaultOptions, args.options),
+                options = args.options,
                 forces = $.extend(args.forces, $.mtAppendGrid.forceOptions);
 
             // Default options
