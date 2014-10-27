@@ -58,6 +58,9 @@ use vars qw( %Lexicon );
     'Move Row With Drag & Drop' => 'ドラッグ＆ドロップで行を移動',
     'No Row' => '行がありません',
 
+## tmpl/customfield/field.tmpl
+    'Show JSON' => 'JSONデータを表示',
+
 ## tmpl/cms/edit_append_grid_schema.tmpl
     'Edit AppendGrid Schema' => 'AppendGridスキーマの編集',
     'Create AppendGrid Schema' => 'AppendGridスキーマの作成',

@@ -14,6 +14,7 @@
         setupGrid: function(args) {
             var $grid = args.grid,
                 $input = args.input,
+                $inputShower = args.inputShower,
                 options = args.options,
                 forces = $.extend(args.forces, $.mtAppendGrid.forceOptions);
 
@@ -64,6 +65,8 @@
             // Hide textarea
             if ( $input )
                 $input.addClass('hidden');
+            if ( $inputShower )
+                $inputShower.removeClass('hidden');
         },
         getAsset: function(id) {
             var $wrapper = $('#' + id);
