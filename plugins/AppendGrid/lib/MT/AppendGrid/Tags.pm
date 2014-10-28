@@ -325,4 +325,44 @@ sub hdlr_AppendGridBuild {
     '';
 }
 
+sub hdlr_AppendGridRowGroups {
+    my ( $ctx, $args, $cond ) = @_;
+    my $group_by = $args->{group_by} || $args->{by}
+        || return $ctx->error(plugin->translate('mt:[_1] template tag requires [_2] attribute.', $ctx->stash('tag'), 'group_by'));
+    defined( my $data = _require_context_data(@_) ) || return;
+
+    my $current = '';
+    my $group;
+    my @groups;
+    foreach my $row ( @$data ) {
+        my $value = $row->{$group_by};
+        $value = '' unless defined $value;
+        if ( !defined($group) || $current ne $value ) {
+            push @groups, $group if $group;
+            $group = [];
+        }
+        push @$group, $row;
+        $current = $row->{$group_by};
+        $current = '' unless defined $current;
+    }
+    push @groups, $group if $group;
+
+    local $ctx->{__stash}->{append_grid_group_by} = $group_by;
+    _basic_loop(\@groups, 'append_grid_data', @_);
+}
+
+sub hdlr_AppendGridRowGroup {
+    my ( $ctx, $args ) = @_;
+
+    defined( my $group = _require_context_data(@_) ) || return;
+    my $group_by = $ctx->{__stash}->{append_grid_group_by}
+        || return $ctx->error(plugin->translate('Use mt:[_1] template tag inside [_2] template tag.', $ctx->stash('tag'), 'AppendGridGroups'));
+
+    if ( $group && ref $group eq 'ARRAY' && @$group ) {
+        return $group->[0]->{$group_by};
+    }
+
+    '';
+}
+
 1;

@@ -74,10 +74,12 @@ tags:
         AppendGridHeader?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridHeader
         AppendGridFooter?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridFooter
         IfAppendGridCustomField?: $AppendGrid::MT::AppendGrid::Tags::hdlr_IfAppendGridCustomField
+        AppendGridRowGroups: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRowGroups
     function:
         AppendGridColumn: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridColumn
         AppendGridCell: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCell
         AppendGridBuild: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridBuild
+        AppendGridRowGroup: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRowGroup
 
 customfield_types:
     append_grid_with_schema:
