@@ -3,7 +3,7 @@ package MT::AppendGrid::Schema;
 use strict;
 use base qw( MT::Object );
 
-use MT::Util;
+use MT::Util qw(encode_html);
 use MT::Util::YAML;
 use MT::AppendGrid::Util;
 
@@ -208,6 +208,8 @@ sub list_props {
                     else {
                         $name = $blog->name;
                     }
+
+                    pp $name;
 
                     push @out,
                           '<a href="'

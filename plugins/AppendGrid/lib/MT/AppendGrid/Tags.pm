@@ -318,6 +318,7 @@ sub hdlr_AppendGridBuild {
         my $tokens = $builder->compile($ctx, $schema->{mtTemplate});
         defined( my $res = $builder->build($ctx, $tokens) )
             || return $ctx->error($builder->errstr);
+
         return $res;
     }
 

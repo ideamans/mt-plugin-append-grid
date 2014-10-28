@@ -22,7 +22,7 @@
     </script>
 </mt:unless>
 
-<p class="hidden" id="<mt:var name="field_id">-show-json"><a href="#<mt:var name="field_id">"><__trans phrase="Show JSON"></a></p>
+<div class="hidden" id="<mt:var name="field_id">-show-json" style="float: right"><a href="#<mt:var name="field_id">"><__trans phrase="Show JSON"></a></div>
 
 <textarea name="<mt:var name="field_name" escape="html">" id="<mt:var name="field_id">" class="text high"><mt:var name="field_value" escape="html" /></textarea>
 
@@ -34,7 +34,7 @@
     (function($) {
         $(function() {
             $('#<mt:var name="field_id" />-show-json a').click(function() {
-                $(this).parent().addClass('hidden');
+                $(this).addClass('hidden');
                 $($(this).attr('href')).removeClass('hidden');
                 return false;
             });

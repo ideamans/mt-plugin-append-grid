@@ -9,8 +9,9 @@ use vars qw( %Lexicon );
 
 ## config.yaml
 	'Adds grid customfield type with appendGrid.' => 'appendGridによるグリッドテーブルのカスタムフィールドを追加します。',
-    'AppendGrid configured by JSON' => 'appendGrid グリッドテーブル(JSON設定)',
-    'AppendGrid configured by YAML' => 'appendGrid グリッドテーブル(YAML設定)',
+    'AppendGrid configured by JSON' => 'AppendGrid グリッドテーブル(JSON設定)',
+    'AppendGrid configured by YAML' => 'AppendGrid グリッドテーブル(YAML設定)',
+    'AppendGrid selected schema' => 'AppendGrid グリッドテーブル(スキーマ選択)',
 
 ## lib/MT/AppendGrid/Schema.pm
     'AppendGrid Schema' => 'AppendGridスキーマ',
@@ -64,6 +65,7 @@ use vars qw( %Lexicon );
 ## tmpl/cms/edit_append_grid_schema.tmpl
     'Edit AppendGrid Schema' => 'AppendGridスキーマの編集',
     'Create AppendGrid Schema' => 'AppendGridスキーマの作成',
+    'Schema Format' => 'スキーマフォーマット',
     'Schema JSON' => 'スキーマJSON',
     'Schema YAML' => 'スキーマYAML',
     'Save changes to this schema (s)' => 'このスキーマを保存する',
