@@ -144,7 +144,7 @@ sub list_props {
                 my ( $prop, $obj, $app ) = @_;
                 return $app->uri(
                     mode => 'view',
-                    args => { _type => 'append_grid_schema', blog_id => $obj->id, id => $obj->id },
+                    args => { _type => 'append_grid_schema', blog_id => $obj->blog_id, id => $obj->id },
                 );
             },
         },
@@ -208,8 +208,6 @@ sub list_props {
                     else {
                         $name = $blog->name;
                     }
-
-                    pp $name;
 
                     push @out,
                           '<a href="'
