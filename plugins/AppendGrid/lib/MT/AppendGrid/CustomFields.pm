@@ -58,6 +58,8 @@ sub append_grid_with_yaml_params {
 sub append_grid_schema_params {
     my ( $key, $tmpl_key, $tmpl_param ) = @_;
 
+    $tmpl_param->{debug_mode} = $MT::DebugMode;
+
     if ( $tmpl_key eq 'field_html' ) {
         _common_field_html_param($tmpl_param);
 
