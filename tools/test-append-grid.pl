@@ -311,6 +311,7 @@ sub tempalte_group {
     my %args;
 
     $args{template} = <<'TMPL';
+<mt:AppendGrid>
 <mt:AppendGridRowGroups by="style">
     <h1><mt:AppendGridRowGroup></h1>
     <dl>
@@ -320,6 +321,7 @@ sub tempalte_group {
     </mt:AppendGridRows>
     </dl>
 </mt:AppendGridRowGroups>
+</mt:AppendGrid>
 TMPL
 
     $args{data} = [
@@ -374,7 +376,6 @@ TMPL
 EXPECT
     test_template(%args);
 }
-
 
 sub main {
     my $mt = MT->instance;
