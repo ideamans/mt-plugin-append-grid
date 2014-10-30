@@ -307,6 +307,75 @@ sub tempalte_cell {
     test_template(%args);
 }
 
+sub tempalte_group {
+    my %args;
+
+    $args{template} = <<'TMPL';
+<mt:AppendGrid>
+<mt:AppendGridRowGroups by="style">
+    <h1><mt:AppendGridRowGroup></h1>
+    <dl>
+    <mt:AppendGridRows>
+        <dt><mt:AppendGridRowGroup></dt>
+        <dd><mt:AppendGridCell col="column"></dd>
+    </mt:AppendGridRows>
+    </dl>
+</mt:AppendGridRowGroups>
+</mt:AppendGrid>
+TMPL
+
+    $args{data} = [
+        { style => 'li',    column => 'VALUE1'  },
+        { style => 'li',    column => 'VALUE2'  },
+        { style => 'p',     column => 'VALUE3'  },
+        { style => 'li',    column => 'VALUE4'  },
+        { style => 'li',    column => 'VALUE5'  },
+        { style => 'li',    column => 'VALUE6'  },
+        {                   column => 'VALUE7'  },
+        { style => '',      column => 'VALUE8'  },
+        { style => 'div',   column => 'VALUE9'  },
+        { style => 'div',   column => 'VALUE10' },
+    ];
+
+    $args{expect} = <<'EXPECT';
+    <h1>li</h1>
+    <dl>
+        <dt>li</dt>
+        <dd>VALUE1</dd>
+        <dt>li</dt>
+        <dd>VALUE2</dd>
+    </dl>
+    <h1>p</h1>
+    <dl>
+        <dt>p</dt>
+        <dd>VALUE3</dd>
+    </dl>
+    <h1>li</h1>
+    <dl>
+        <dt>li</dt>
+        <dd>VALUE4</dd>
+        <dt>li</dt>
+        <dd>VALUE5</dd>
+        <dt>li</dt>
+        <dd>VALUE6</dd>
+    </dl>
+    <h1></h1>
+    <dl>
+        <dt></dt>
+        <dd>VALUE7</dd>
+        <dt></dt>
+        <dd>VALUE8</dd>
+    </dl>
+    <h1>div</h1>
+    <dl>
+        <dt>div</dt>
+        <dd>VALUE9</dd>
+        <dt>div</dt>
+        <dd>VALUE10</dd>
+    </dl>
+EXPECT
+    test_template(%args);
+}
 
 sub main {
     my $mt = MT->instance;
