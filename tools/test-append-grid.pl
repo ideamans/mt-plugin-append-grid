@@ -317,7 +317,7 @@ sub tempalte_group {
     <dl>
     <mt:AppendGridRows>
         <dt><mt:AppendGridRowGroup></dt>
-        <dd><mt:AppendGridCell col="column"></dd>
+        <dd class="<mt:AppendGridHeader> first</mt:AppendGridHeader><mt:AppendGridFooter> last</mt:AppendGridFooter>"><mt:AppendGridCell col="column"></dd>
     </mt:AppendGridRows>
     </dl>
 </mt:AppendGridRowGroups>
@@ -341,37 +341,37 @@ TMPL
     <h1>li</h1>
     <dl>
         <dt>li</dt>
-        <dd>VALUE1</dd>
+        <dd class=" first">VALUE1</dd>
         <dt>li</dt>
-        <dd>VALUE2</dd>
+        <dd class=" last">VALUE2</dd>
     </dl>
     <h1>p</h1>
     <dl>
         <dt>p</dt>
-        <dd>VALUE3</dd>
+        <dd class=" first last">VALUE3</dd>
     </dl>
     <h1>li</h1>
     <dl>
         <dt>li</dt>
-        <dd>VALUE4</dd>
+        <dd class=" first">VALUE4</dd>
         <dt>li</dt>
-        <dd>VALUE5</dd>
+        <dd class="">VALUE5</dd>
         <dt>li</dt>
-        <dd>VALUE6</dd>
+        <dd class=" last">VALUE6</dd>
     </dl>
     <h1></h1>
     <dl>
         <dt></dt>
-        <dd>VALUE7</dd>
+        <dd class=" first">VALUE7</dd>
         <dt></dt>
-        <dd>VALUE8</dd>
+        <dd class=" last">VALUE8</dd>
     </dl>
     <h1>div</h1>
     <dl>
         <dt>div</dt>
-        <dd>VALUE9</dd>
+        <dd class=" first">VALUE9</dd>
         <dt>div</dt>
-        <dd>VALUE10</dd>
+        <dd class=" last">VALUE10</dd>
     </dl>
 EXPECT
     test_template(%args);
