@@ -69,6 +69,8 @@ tags:
         AppendGrid: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGrid
         AppendGridColumns: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridColumns
         AppendGridRows: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRows
+        AppendGridPrevious: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridPrevious
+        AppendGridNext: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridNext
         AppendGridRow: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRow
         AppendGridCellAsset: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCellAsset
         AppendGridHeader?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridHeader

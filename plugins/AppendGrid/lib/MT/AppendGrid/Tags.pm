@@ -176,8 +176,14 @@ sub _basic_loop {
     my $result = '';
     my $vars = $ctx->{__stash}{vars} ||= {};
     my $size = scalar @$array;
+
+    local $vars->{__array__} = $array;
+    local $vars->{__stashing__} = $stash;
+    local $vars->{__size__} = $size;
+
     for( my $i = 0; $i < $size; $i++ ) {
         local $ctx->{__stash}->{$stash} = $array->[$i];
+        local $vars->{__index__} = $i;
         local $vars->{__first__} = ( $i == 0 )? 1: 0;
         local $vars->{__last__} = ( $i == $size-1 )? 1: 0;
         local $vars->{__odd__} = ( $i % 2 ) == 1;
@@ -189,6 +195,45 @@ sub _basic_loop {
     }
 
     $result;
+}
+
+sub _hdlr_AppendGridOffset {
+    my ( $offset, $ctx, $args, $cond ) = @_;
+    my $vars = $ctx->{__stash}{vars} ||= {};
+    my $stashing = $vars->{__stashing__} || return $ctx->error(plugin->translate('Not in AppendGrid loop context.'));
+
+    my $array = $vars->{__array__} || return $ctx->error(plugin->translate('Not in AppendGrid loop context.'));
+    return $ctx->error(plugin->translate('Not in AppendGrid loop context.')) unless ref $array eq 'ARRAY';
+
+    my $counter = $vars->{__counter__};
+    return $ctx->error(plugin->translate('Not in AppendGrid loop context.')) unless defined($counter);
+    return $ctx->error(plugin->translate('Not in AppendGrid loop context.')) unless ref $counter eq '';
+
+    my $i = int($counter) + int($offset);
+    my $value = $array->[$i] || return '';
+    my $size = $vars->{__size__};
+
+    local $ctx->{__stash}{$stashing} = $value;
+    local $vars->{__first__} = ( $i == 0 )? 1: 0;
+    local $vars->{__last__} = ( $i == $size-1 )? 1: 0;
+    local $vars->{__odd__} = ( $i % 2 ) == 1;
+    local $vars->{__even__} = ( $i % 2 ) == 0;
+    local $vars->{__counter__} = $i;
+
+    my $builder = $ctx->stash('builder');
+    my $tokens = $ctx->stash('tokens');
+    defined( my $res = $builder->build($ctx, $tokens, $cond) )
+        || return $ctx->error($builder->errstr);
+
+    $res;
+}
+
+sub hdlr_AppendGridPrevious {
+    _hdlr_AppendGridOffset( -1, @_ );
+}
+
+sub hdlr_AppendGridNext {
+    _hdlr_AppendGridOffset( +1, @_ );
 }
 
 sub hdlr_AppendGrid {

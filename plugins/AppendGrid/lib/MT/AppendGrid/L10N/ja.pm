@@ -50,6 +50,7 @@ use vars qw( %Lexicon );
     'mt:[_1] template tag requires at least one of [_2] as attributes.' => 'mt:[_1]テンプレートタグには、[_2]のいずれかの属性が必要です。',
     'No column definition named "[_1]".' => '"[_1]"というnameの列定義は存在しません。',
     'No column indexed [_1].' => 'インデックス[_1]の列定義は存在しません。',
+    'Not in AppendGrid loop context.' => 'AppendGridのループコンテキストにありません。mt:AppendGridRows、mt:AppendGridColumnsなどの内部で利用ください。',
 
 ## tmpl/append_grid_with_json
     'Append' => '追加',

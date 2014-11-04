@@ -295,6 +295,55 @@ EOH
     test_template(%args);
 }
 
+sub template_next_previous {
+    my %args;
+
+    $args{template} = <<'EOT';
+<table>
+    <mt:AppendGridRows>
+    <tr>
+        <td><mt:AppendGridCell column="column1" /></td>
+        <td><mt:AppendGridCell column="column2" /></td>
+        <td><mt:AppendGridCell column="column3" /></td>
+    </tr>
+    <mt:AppendGridNext>
+    <tr>
+        <td><mt:AppendGridCell column="column1" /></td>
+        <td><mt:AppendGridCell column="column2" /></td>
+        <td><mt:AppendGridCell column="column3" /></td>
+    </tr>
+    </mt:AppendGridNext>
+    </mt:AppendGridRows>
+</table>
+EOT
+    $args{data} = [
+        { column1 => 'VALUE1-1', column2 => 'VALUE1-2', column3 => 'VALUE1-3' },
+        { column1 => 'VALUE2-1', column2 => 'VALUE2-2', column3 => 'VALUE2-3' },
+    ];
+
+    $args{expect} = <<'EOH';
+<table>
+    <tr>
+        <td>VALUE1-1</td>
+        <td>VALUE1-2</td>
+        <td>VALUE1-3</td>
+    </tr>
+    <tr>
+        <td>VALUE2-1</td>
+        <td>VALUE2-2</td>
+        <td>VALUE2-3</td>
+    </tr>
+    <tr>
+        <td>VALUE2-1</td>
+        <td>VALUE2-2</td>
+        <td>VALUE2-3</td>
+    </tr>
+</table>
+EOH
+
+    test_template(%args);
+}
+
 sub tempalte_cell {
     my %args;
 
@@ -389,6 +438,7 @@ sub main {
     template_basic;
     template_only_columns;
     template_only_rows;
+    template_next_previous;
     template_column;
     tempalte_cell;
     tempalte_group;
