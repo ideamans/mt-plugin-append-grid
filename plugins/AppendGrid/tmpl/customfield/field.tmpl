@@ -20,32 +20,53 @@
 
         })(jQuery);
     </script>
+
+    <style type="text/css">
+        .append-grid-controll {
+            position: relative;
+            float: right;
+            margin-top: -30px;
+        }
+
+        .append-grid-exchange {
+            margin-top: 8px;
+        }
+
+        .icon-up { background-image: url(<mt:StaticWebPath>images/status_icons/up.gif); }
+        .icon-down { background-image: url(<mt:StaticWebPath>images/status_icons/download.gif); }
+
+        .append-grid-mode-json .hidden-on-json { display: none; }
+        .append-grid-mode-live .hidden-on-live { display: none; }
+    </style>
+
+    <mt:setvar name="append_grid_included" value="1">
 </mt:unless>
 
-<div class="hidden" id="<mt:var name="field_id">-show-json" style="float: right"><a href="#<mt:var name="field_id">"><__trans phrase="Show JSON"></a></div>
+<div class="append-grid-container append-grid-wrapper append-grid-mode-live" id="<mt:var name="field_id">-container">
+    <div class="append-grid-controll">
+        <a href="javascript:void(0)" class="append-grid-show-json hidden-on-json"><__trans phrase="Show JSON"></a>
+        <a href="javascript:void(0)" class="append-grid-hide-json hidden-on-live"><__trans phrase="Hide JSON"></a>
+    </div>
 
-<textarea name="<mt:var name="field_name" escape="html">" id="<mt:var name="field_id">" class="text high"><mt:var name="field_value" escape="html" /></textarea>
+    <div class="append-grid-values-wrapper hidden-on-live">
+        <h4><__trans phrase="JSON Data"></h4>
+        <textarea class="text high append-grid-values" name="<mt:var name="field_name" escape="html">" id="<mt:var name="field_id">"><mt:var name="field_value" escape="html" /></textarea>
+        <div class="hint"><__trans phrase="To update values of AppendGrid, paste JSON and press AppendGrid to JSON."></div>
+        <div class="append-grid-exchange actions-bar actions-bar-bottom line">
+            <a href="#" class="button append-grid-get-json"><span class="icon-left icon-up"><__trans phrase="AppendGrid to JSON"></span></a>
+            <a href="#" class="button append-grid-set-json"><span class="icon-left icon-down"><__trans phrase="JSON to AppendGrid"></span></a>
+        </div>
 
-<div class="append-grid-wrapper">
-    <table id="<mt:var name="field_id" />-grid-table"></table>
+        <h4><__trans phrase="AppendGrid"></h4>
+    </div>
+
+    <table class="append-grid-table" id="<mt:var name="field_id" />-grid-table"></table>
 </div>
 
 <script>
     (function($) {
         $(function() {
-            $('#<mt:var name="field_id" />-show-json a').click(function() {
-                $(this).addClass('hidden');
-                $($(this).attr('href')).removeClass('hidden');
-                return false;
-            });
-
-            $.mtAppendGrid.setupGrid({
-                options: <mt:var name="options" _default="{}">,
-                forces: {},
-                grid: $('#<mt:var name="field_id">-grid-table'),
-                input: $('#<mt:var name="field_id">'),
-                inputShower: $('#<mt:var name="field_id">-show-json')
-            });
+            $('#<mt:var name="field_id">-container').widgetAppendGrid(<mt:var name="options" _default="{}">);
         });
     })(jQuery);
 </script>

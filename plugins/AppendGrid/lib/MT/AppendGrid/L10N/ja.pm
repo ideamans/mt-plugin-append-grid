@@ -64,6 +64,11 @@ use vars qw( %Lexicon );
 
 ## tmpl/customfield/field.tmpl
     'Show JSON' => 'JSONデータを表示',
+    'Hide JSON' => 'JSONデータを隠す',
+    'AppendGrid to JSON' => 'AppendGridからJSONへ',
+    'JSON to AppendGrid' => 'JSONからAppendGridへ',
+    'JSON Data' => 'JSONデータ',
+    'To update values of AppendGrid, paste JSON and press AppendGrid to JSON.' => 'JSONデータを貼り付けて、「AppendGridからJSON」ボタンを押すと、AppendGridの値を一括で更新できます。',
 
 ## tmpl/cms/edit_append_grid_schema.tmpl
     'Edit AppendGrid Schema' => 'AppendGridスキーマの編集',
