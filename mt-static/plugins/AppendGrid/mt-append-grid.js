@@ -243,7 +243,7 @@
                             url += '&amp;filter=class&amp;filter_val=' + params.assetType + '&amp;require_type=' + params.assetType;
                         }
 
-                        $wrapper.find('.append-grid-select-asset').attr('href', url);
+                        $wrapper.find('.append-grid-select-asset').attr('href', url).mtDialog();
                         $wrapper.find('.append-grid-remove-asset').click(function() {
                             $.mtAppendGrid.removeAsset(id);
                             return false;
@@ -392,6 +392,9 @@
             this.jqGrid = this.jqTable.appendGrid(opts);
 
             return this.jqGrid;
+        },
+        tearDown: function() {
+
         }
     });
 })(jQuery);
