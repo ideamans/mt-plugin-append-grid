@@ -3,7 +3,7 @@ package MT::AppendGrid::Schema;
 use strict;
 use base qw( MT::Object );
 
-use MT::Util;
+use MT::Util qw(encode_html);
 use MT::Util::YAML;
 use MT::AppendGrid::Util;
 
@@ -144,7 +144,7 @@ sub list_props {
                 my ( $prop, $obj, $app ) = @_;
                 return $app->uri(
                     mode => 'view',
-                    args => { _type => 'append_grid_schema', blog_id => $obj->id, id => $obj->id },
+                    args => { _type => 'append_grid_schema', blog_id => $obj->blog_id, id => $obj->id },
                 );
             },
         },

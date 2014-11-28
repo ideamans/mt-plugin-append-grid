@@ -1,6 +1,6 @@
 id: AppendGrid
 name: AppendGrid
-version: 0.1.0
+version: 0.1.1
 schema_version: 0.05
 l10n_class: MT::AppendGrid::L10N
 description: <__trans phrase="Adds grid customfield type with appendGrid.">
@@ -69,15 +69,19 @@ tags:
         AppendGrid: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGrid
         AppendGridColumns: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridColumns
         AppendGridRows: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRows
+        AppendGridPrevious: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridPrevious
+        AppendGridNext: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridNext
         AppendGridRow: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRow
         AppendGridCellAsset: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCellAsset
         AppendGridHeader?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridHeader
         AppendGridFooter?: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridFooter
         IfAppendGridCustomField?: $AppendGrid::MT::AppendGrid::Tags::hdlr_IfAppendGridCustomField
+        AppendGridRowGroups: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRowGroups
     function:
         AppendGridColumn: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridColumn
         AppendGridCell: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridCell
         AppendGridBuild: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridBuild
+        AppendGridRowGroup: $AppendGrid::MT::AppendGrid::Tags::hdlr_AppendGridRowGroup
 
 customfield_types:
     append_grid_with_schema:

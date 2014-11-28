@@ -9,8 +9,9 @@ use vars qw( %Lexicon );
 
 ## config.yaml
 	'Adds grid customfield type with appendGrid.' => 'appendGridによるグリッドテーブルのカスタムフィールドを追加します。',
-    'AppendGrid configured by JSON' => 'appendGrid グリッドテーブル(JSON設定)',
-    'AppendGrid configured by YAML' => 'appendGrid グリッドテーブル(YAML設定)',
+    'AppendGrid configured by JSON' => 'AppendGrid グリッドテーブル(JSON設定)',
+    'AppendGrid configured by YAML' => 'AppendGrid グリッドテーブル(YAML設定)',
+    'AppendGrid selected schema' => 'AppendGrid グリッドテーブル(スキーマ選択)',
 
 ## lib/MT/AppendGrid/Schema.pm
     'AppendGrid Schema' => 'AppendGridスキーマ',
@@ -44,9 +45,12 @@ use vars qw( %Lexicon );
     'No AppendGrid row context. Set index as row attribute of AppendGridRow template tag or use in AppendGridRows template tag.'
         => 'AppendGrid行データがコンテキストにありません。mt:AppendGridRowにrow属性として行インデックスを指定するか、AppendGridRowsテンプレートタグの内部で使用してください。',
     'No AppendGrid column context. Use in AppendGridColumns template tag.' => 'AppendGrid列情報がコンテキストにありません。mt:AppendGridColumnsテンプレートタグの内部で使用してください。',
-    'mt:[_1] template tag requires at least one of [_2] as attributes.' => 'mt:[_1]テンプレートタグは、[_2]のいずれかの属性が必要です。',
+    'mt:[_1] template tag requires [_2] attribute.' => 'mt:[_1]テンプレートタグには、[_2]属性が必要です。',
+    'Use mt:[_1] template tag inside [_2] template tag.' => 'mt:[_1]テンプレートタグは、mt:[_2]テンプレートタグの内部で使用してください。',
+    'mt:[_1] template tag requires at least one of [_2] as attributes.' => 'mt:[_1]テンプレートタグには、[_2]のいずれかの属性が必要です。',
     'No column definition named "[_1]".' => '"[_1]"というnameの列定義は存在しません。',
     'No column indexed [_1].' => 'インデックス[_1]の列定義は存在しません。',
+    'Not in AppendGrid loop context.' => 'AppendGridのループコンテキストにありません。mt:AppendGridRows、mt:AppendGridColumnsなどの内部で利用ください。',
 
 ## tmpl/append_grid_with_json
     'Append' => '追加',
@@ -58,9 +62,18 @@ use vars qw( %Lexicon );
     'Move Row With Drag & Drop' => 'ドラッグ＆ドロップで行を移動',
     'No Row' => '行がありません',
 
+## tmpl/customfield/field.tmpl
+    'Show JSON' => 'JSONデータを表示',
+    'Hide JSON' => 'JSONデータを隠す',
+    'AppendGrid to JSON' => 'AppendGridからJSONへ',
+    'JSON to AppendGrid' => 'JSONからAppendGridへ',
+    'JSON Data' => 'JSONデータ',
+    'To update values of AppendGrid, paste JSON and press AppendGrid to JSON.' => 'JSONデータを貼り付けて、「AppendGridからJSON」ボタンを押すと、AppendGridの値を一括で更新できます。',
+
 ## tmpl/cms/edit_append_grid_schema.tmpl
     'Edit AppendGrid Schema' => 'AppendGridスキーマの編集',
     'Create AppendGrid Schema' => 'AppendGridスキーマの作成',
+    'Schema Format' => 'スキーマフォーマット',
     'Schema JSON' => 'スキーマJSON',
     'Schema YAML' => 'スキーマYAML',
     'Save changes to this schema (s)' => 'このスキーマを保存する',

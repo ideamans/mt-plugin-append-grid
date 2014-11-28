@@ -28,7 +28,6 @@
 (function($) {
     var updateSchemaFormatState = function() {
         var format = $('#schema_format_yaml').attr('checked') ? 'yaml' : 'json';
-        console.log(format);
         if ( format == 'yaml' ) {
             $('#schema_json-field').hide();
             $('#schema_yaml-field').fadeIn('fast');

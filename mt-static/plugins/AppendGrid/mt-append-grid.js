@@ -1,5 +1,25 @@
 (function($) {
     $.mtAppendGrid = {
+        stringify : function (obj) {
+            var t = typeof (obj);
+            if (t != "object" || obj === null) {
+                // simple data type
+                if (t == "string") obj = '"' + obj + '"';
+                return String(obj);
+            } else {
+                // recurse array or object
+                var n, v, json = [], arr = (obj && obj.constructor == Array);
+                for (n in obj) {
+                    v = obj[n];
+                    t = typeof(v);
+                    if (obj.hasOwnProperty(n)) {
+                        if (t == "string") v = '"' + v.replace(/"/g, '\\"').replace(/\n/g, '\\n').replace(/\t/g, '\\t') + '"'; else if (t == "object" && v !== null) v = $.mtAppendGrid.stringify(v);
+                        json.push((arr ? "" : '"' + n + '":') + String(v));
+                    }
+                }
+                return (arr ? "[" : "{") + String(json) + (arr ? "]" : "}");
+            }
+        },
         safeSetupGrid: function(args) {
             try {
                 $.mtAppendGrid.setupGrid(args);
@@ -14,7 +34,8 @@
         setupGrid: function(args) {
             var $grid = args.grid,
                 $input = args.input,
-                options = $.extend($.mtAppendGrid.defaultOptions, args.options),
+                $inputShower = args.inputShower,
+                options = args.options,
                 forces = $.extend(args.forces, $.mtAppendGrid.forceOptions);
 
             // Default options
@@ -64,6 +85,8 @@
             // Hide textarea
             if ( $input )
                 $input.addClass('hidden');
+            if ( $inputShower )
+                $inputShower.removeClass('hidden');
         },
         getAsset: function(id) {
             var $wrapper = $('#' + id);
@@ -220,7 +243,7 @@
                             url += '&amp;filter=class&amp;filter_val=' + params.assetType + '&amp;require_type=' + params.assetType;
                         }
 
-                        $wrapper.find('.append-grid-select-asset').attr('href', url);
+                        $wrapper.find('.append-grid-select-asset').attr('href', url).mtDialog();
                         $wrapper.find('.append-grid-remove-asset').click(function() {
                             $.mtAppendGrid.removeAsset(id);
                             return false;
@@ -249,7 +272,129 @@
         i18n: {}
     };
 
-    $.fn.mtAppendGrid = function(options) {
+    $.widget('mt.widgetAppendGrid', {
+        defaults: {
+            initRows: 3,
+            rowDragging: true,
+            hideButtons: { moveUp: true, moveDown: true },
+            i18n: $.mtAppendGrid.i18n
+        },
+        _init: function(options) {
+            var opts = $.extend(this.defaults, $.mtAppendGrid.defaultOptions, this.options, $.mtAppendGrid.forceOptions),
+                grid = this,
+                $grid = $(this.element);
 
-    };
+            grid.opts = opts;
+
+            grid.jqContainer = $grid;
+            grid.jqValuesWrapper = $grid.find('.append-grid-values-wrapper');
+            grid.jqValues = $grid.find('.append-grid-values');
+            grid.jqTable = $grid.find('.append-grid-table');
+
+            grid.jqControll = $grid.find('.append-grid-controll')
+            grid.jqShowJson = $grid.find('.append-grid-show-json')
+            grid.jqHideJson = $grid.find('.append-grid-hide-json')
+            grid.jqGetJson = $grid.find('.append-grid-get-json')
+            grid.jqSetJson = $grid.find('.append-grid-set-json')
+            grid.jqParentForm = $grid.closest('form')
+
+            grid.setUp();
+
+            // var values = grid.parseValues(grid.jqValues.val());
+            // grid.setValues(values);
+
+            grid.jqShowJson.click(function() {
+                grid.setStatus('json')
+                return false;
+            });
+
+            grid.jqHideJson.click(function() {
+                grid.setStatus('live');
+                return false;
+            });
+
+            grid.jqGetJson.click(function() {
+                grid.gridToJson();
+                return false;
+            });
+
+            grid.jqSetJson.click(function() {
+                grid.jsonToGrid();
+                return false;
+            });
+
+            grid.jqParentForm.submit(function() {
+                grid.gridToJson();
+                grid.tearDown();
+                return true;
+            });
+        },
+        setStatus: function(status) {
+            if ( status == 'json' ) {
+                this.jqContainer.removeClass('append-grid-mode-live').addClass('append-grid-mode-json');
+            } else { // stauts == 'live'
+                this.jqContainer.addClass('append-grid-mode-live').removeClass('append-grid-mode-json');
+            }
+        },
+        gridToJson: function() {
+            var values = this.jqGrid.appendGrid('getAllValue');
+            var json = this.stringifyValues(values);
+
+            this.jqValues.val(json);
+        },
+        jsonToGridArray: function(json) {
+            var data = this.parseValues(json, []);
+            if ( !data || !data instanceof Array ) { data = []; }
+            return data;
+        },
+        jsonToGrid: function() {
+            var json = this.jqValues.val();
+            var values = this.jsonToGridArray(json);
+            this.jqGrid.appendGrid('load', values);
+        },
+        parseValues: function(json, _default) {
+            var values = _default;
+            try {
+                values = JSON.parse(json);
+            } catch(ex) {}
+
+            if ( typeof values == 'string' ) {
+                values = JSON.parse(values);
+            }
+
+            return values;
+        },
+        stringifyValues: function(values) {
+            var json = $.mtAppendGrid.stringify(values);
+            try {
+                var str = JSON.parse(json);
+                if ( typeof str == 'string' ) { json = str; }
+            } catch (ex) {}
+
+            return json;
+        },
+        setUp: function() {
+            var opts = this.opts;
+
+            // Columns
+            opts.columns = opts.columns || []
+            $.each(this.opts.columns, function(i, col) {
+                var typer = col.type ? $.mtAppendGrid.customTypes[col.type] : undefined;
+                var typed = typer ? typer(opts) : {};
+                opts.columns[i] = $.extend(col, typed);
+            });
+
+            // Data
+            var value = this.jqValues ? this.jqValues.val() : '';
+            opts.initData = this.jsonToGridArray(value);
+
+            // Build options
+            this.jqGrid = this.jqTable.appendGrid(opts);
+
+            return this.jqGrid;
+        },
+        tearDown: function() {
+
+        }
+    });
 })(jQuery);
