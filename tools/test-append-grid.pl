@@ -356,6 +356,57 @@ sub tempalte_cell {
     test_template(%args);
 }
 
+sub tempalte_vars {
+    my %args;
+
+    $args{data} = [
+        { column1 => 'VALUE1-1', column2 => 'VALUE1-2', column3 => 'VALUE1-3' },
+        { column1 => 'VALUE2-1', column2 => 'VALUE2-2', column3 => 'VALUE2-3' },
+    ];
+
+    # vars="1"
+    $args{template} = <<'EOT';
+<mt:AppendGridRows vars="1">
+column1:<mt:Var name="appendgrid_column1">, column2:<mt:Var name="appendgrid_column2">, none:<mt:Var name="column1">
+</mt:AppendGridRows>
+EOT
+
+    $args{expect} = <<'EOH';
+column1:VALUE1-1, column2:VALUE1-2, none:
+column1:VALUE2-1, column2:VALUE2-2, none:
+EOH
+
+    test_template(%args);
+
+    # vars=""
+    $args{template} = <<'EOT';
+<mt:AppendGridRows vars="">
+column1:<mt:Var name="column1">, column2:<mt:Var name="column2">, none:<mt:Var name="appendgrid_column1">
+</mt:AppendGridRows>
+EOT
+
+    $args{expect} = <<'EOH';
+column1:VALUE1-1, column2:VALUE1-2, none:
+column1:VALUE2-1, column2:VALUE2-2, none:
+EOH
+
+    test_template(%args);
+
+    # vars="ag"
+    $args{template} = <<'EOT';
+<mt:AppendGridRows vars="ag">
+column1:<mt:Var name="ag_column1">, column2:<mt:Var name="ag_column2">, none:<mt:Var name="appendgrid_column1">
+</mt:AppendGridRows>
+EOT
+
+    $args{expect} = <<'EOH';
+column1:VALUE1-1, column2:VALUE1-2, none:
+column1:VALUE2-1, column2:VALUE2-2, none:
+EOH
+
+    test_template(%args);
+}
+
 sub tempalte_group {
     my %args;
 
@@ -441,6 +492,7 @@ sub main {
     template_next_previous;
     template_column;
     tempalte_cell;
+    tempalte_vars;
     tempalte_group;
 }
 

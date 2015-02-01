@@ -182,13 +182,20 @@ sub _basic_loop {
     local $vars->{__size__} = $size;
 
     for( my $i = 0; $i < $size; $i++ ) {
-        local $ctx->{__stash}->{$stash} = $array->[$i];
+        my $item = $array->[$i];
+        my $vars = {};
+
+        $vars = $item->{__vars__}
+            if ref $item eq 'HASH' && ref $item->{__vars__} eq 'HASH';
+
+        local $ctx->{__stash}->{$stash} = $item;
         local $vars->{__index__} = $i;
         local $vars->{__first__} = ( $i == 0 )? 1: 0;
         local $vars->{__last__} = ( $i == $size-1 )? 1: 0;
         local $vars->{__odd__} = ( $i % 2 ) == 1;
         local $vars->{__even__} = ( $i % 2 ) == 0;
         local $vars->{__counter__} = $i;
+        local @{ $ctx->{__stash}->{vars} }{ keys %$vars } = values %$vars;
 
         defined( my $partial = $builder->build($ctx, $tokens, $cond) ) || return;
         $result .= $partial;
@@ -278,6 +285,29 @@ sub hdlr_AppendGridColumn {
 sub hdlr_AppendGridRows {
     my ( $ctx, $args, $cond ) = @_;
     defined( my $data = _require_context_data(@_) ) || return;
+
+    my $prefix;
+    if ( defined($args->{vars}) ) {
+        $prefix = $args->{vars};
+        if ( $prefix eq '0' ) {
+            $prefix = undef;
+        } else {
+            $prefix = 'appendgrid' if $prefix eq '1';
+            $prefix .= '_' if $prefix ne '';
+        }
+
+        if ( defined($prefix) ) {
+            foreach my $hash ( @$data ) {
+                delete $hash->{__vars__};
+
+                my %vars;
+                foreach my $key ( keys %$hash ) {
+                    $vars{$prefix . $key} = $hash->{$key};
+                }
+                $hash->{__vars__} = \%vars;
+            }
+        }
+    }
 
     local $ctx->{__stash}->{append_grid_data} = $data;
     _basic_loop($data, 'append_grid_row', @_);
