@@ -3,3 +3,24 @@
 <link rel="stylesheet" href="<$MTStaticWebPath$>plugins/AppendGrid/mt-append-grid.css?v=<mt:var name='plugin_version'>" type="text/css" />
 <script type="text/javascript" src="<$MTStaticWebPath$>plugins/AppendGrid/jquery.appendGrid/jquery.appendGrid-1.5.0.min.js?v=<mt:var name='plugin_version'>"></script>
 <script type="text/javascript" src="<$MTStaticWebPath$>plugins/AppendGrid/mt-append-grid.js?v=<mt:var name='plugin_version'>"></script>
+
+<script type="text/javascript">
+    (function($) {
+        $.mtAppendGrid.i18n = $.extend($.mtAppendGrid.i18n, {
+            append: '<__trans phrase="Append">',
+            removeLast: '<__trans phrase="Remove Last">',
+            insert: '<__trans phrase="Insert Above">',
+            remove: '<__trans phrase="Remove">',
+            moveUp: '<__trans phrase="Move Up">',
+            moveDown: '<__trans phrase="Move Down">',
+            rowDrag: '<__trans phrase="Move Row With Drag & Drop">',
+            rowEmpty: '<__trans phrase="No Rows">',
+            'Select': '<__trans phrase="Select">',
+            'Remove': '<__trans phrase="Remove">'
+        });
+
+        $.mtAppendGrid.selectAssetUrlBase = "<mt:var name="script_url">?__mode=list_asset&amp;_type=asset&amp;blog_id=<mt:var name="blog_id">&amp;dialog_view=1&amp;asset_select=1";
+
+    })(jQuery);
+</script>
+

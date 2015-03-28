@@ -9,8 +9,7 @@ sub asset_insert_param {
     my ( $cb, $app, $param, $tmpl ) = @_;
     my $edit_field = $app->param('edit_field');
 
-
-    return 1 unless $edit_field =~ /appendgridfield/;
+    return 1 if $edit_field !~ /appendgridfield/ && $edit_field !~ /schema_preview/;
     $edit_field =~ s/appendgridfield/customfield/;
     $param->{'edit_field_id'} = $edit_field;
 
