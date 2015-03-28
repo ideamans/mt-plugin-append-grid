@@ -39,14 +39,60 @@
 
     updateSchemaFormatState();
     $('.schema_selector').click(updateSchemaFormatState);
+
+    var options = jQuery('#template').attr('mt:editor-options');
+    var editor_params = {
+        lineNumbers: true,
+        lineWrapping: false,
+        tabMode: "default",
+        indentUnit: 0,
+        pollForIME: true,
+        mode: "text/html"
+    };
+    if (options.match('lang:css')) {
+        editor_params['mode'] = 'text/css';
+    } else if (options.match('lang:javascript')) {
+        editor_params['mode'] = 'text/javascript';
+    }
+
+    var editor = CodeMirror.fromTextArea(jQuery('#template').get(0), editor_params);
+
+    function syncEditor() {
+        var wrapper = editor.getWrapperElement();
+        if ( jQuery(wrapper).css('display') == 'none') {
+            editor.setValue(jQuery('#template').val());
+        } else {
+            jQuery('#template').val(editor.getValue());
+        }
+    }
+
+    $('button.save').click(function() {
+        syncEditor();
+    });
 })(jQuery);
 </mt:setvarblock>
 
 <mt:setvarblock name="html_head" append="1">
+
+<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/lib/codemirror.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<link rel="stylesheet" href="<$mt:var name="static_uri"$>codemirror/lib/codemirror.css">
+
+<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/mt/xml.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/mt/javascript.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/mt/css.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<script type="text/javascript" src="<$mt:var name="static_uri"$>codemirror/mt/htmlmixed.js?v=<mt:var name="mt_version_id" escape="URL">"></script>
+<link rel="stylesheet" href="<$mt:var name="static_uri"$>codemirror/mt/mt.css">
+
 <mt:include name="cms/append_grid_html_head.tmpl" component="AppendGrid">
 <style type="text/css">
   #schema_yaml-field, #schema_json-field { display: none; }
 </style>
+</mt:setvarblock>
+
+<mt:setvarblock name="content_header" append="1">
+<ul id="content-actions" class="action-link-list">
+  <li><a href="<mt:var name='list_uri' escape='html' />" class="icon-left icon-batch"><__trans phrase="Manage AppendGrid Schemas"></a></li>
+</ul>
 </mt:setvarblock>
 
 <mt:setvar name="screen_group" value="custom_fields" />
@@ -122,7 +168,7 @@
        label="<__trans phrase="Template">"
        show_hint="1"
        hint="<__trans phrase="This is not required. Template to build AppendGrid data with mt:AppendGridBuild tag.">">
-         <textarea name="template" id="template" class="text high full" rows="5"><mt:var name="template" escape="html"></textarea>
+         <textarea name="template" id="template" class="text high full monospace" spellcheck="false" mt:watch-change="1" mt:editor="codemirror" mt:editor-options="lang:css autocomplete:off" rows="5"><mt:var name="template" escape="html"></textarea>
     </mtapp:setting>
 
   </mtapp:settinggroup>

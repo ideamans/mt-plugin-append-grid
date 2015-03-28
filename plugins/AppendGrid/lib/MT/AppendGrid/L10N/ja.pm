@@ -71,6 +71,7 @@ use vars qw( %Lexicon );
     'To update values of AppendGrid, paste JSON and press AppendGrid to JSON.' => 'JSONデータを貼り付けて、「AppendGridからJSON」ボタンを押すと、AppendGridの値を一括で更新できます。',
 
 ## tmpl/cms/edit_append_grid_schema.tmpl
+    'Manage AppendGrid Schemas' => 'AppendGridスキーマ一覧',
     'Edit AppendGrid Schema' => 'AppendGridスキーマの編集',
     'Create AppendGrid Schema' => 'AppendGridスキーマの作成',
     'Schema Format' => 'スキーマフォーマット',
