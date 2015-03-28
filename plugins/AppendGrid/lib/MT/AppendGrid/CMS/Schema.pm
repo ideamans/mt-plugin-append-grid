@@ -42,6 +42,14 @@ sub edit {
         $param->{template} = plugin->translate('_default_schema_template');
     }
 
+    $param->{list_uri} = $app->uri(
+        mode => 'list',
+        args => {
+            _type => 'append_grid_schema',
+            $blog_id ? ( blog_id => $blog_id ) : (),
+        },
+    );
+
     $param->{output} = File::Spec->catfile( plugin->{full_path},
         'tmpl', 'cms', 'edit_append_grid_schema.tmpl' );
 }

@@ -89,6 +89,12 @@
 </style>
 </mt:setvarblock>
 
+<mt:setvarblock name="content_header" append="1">
+<ul id="content-actions" class="action-link-list">
+  <li><a href="<mt:var name='list_uri' escape='html' />" class="icon-left icon-batch"><__trans phrase="Manage AppendGrid Schemas"></a></li>
+</ul>
+</mt:setvarblock>
+
 <mt:setvar name="screen_group" value="custom_fields" />
 <mt:include name="include/header.tmpl" id="header_include">
 
