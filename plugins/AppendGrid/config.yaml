@@ -1,6 +1,6 @@
 id: AppendGrid
 name: AppendGrid
-version: 0.1.2
+version: 0.1.3
 schema_version: 0.05
 l10n_class: MT::AppendGrid::L10N
 description: <__trans phrase="Adds grid customfield type with appendGrid.">
