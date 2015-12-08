@@ -67,13 +67,15 @@
 ----------------------------------*/
 
 /* states and images */
+/* MTの標準カレンダーの左右ボタンを非表示にしてしまうため除去 */
+/*
 .ui-icon {
 	display: block;
 	text-indent: -99999px;
 	overflow: hidden;
 	background-repeat: no-repeat;
 }
-
+*/
 
 /* Misc visuals
 ----------------------------------*/
