@@ -211,6 +211,32 @@
             updatePreview();
         },
         customTypes: {
+            'tinymce': function(params) {
+                // Build custom column
+                return {
+                    type: 'custom',
+                    customBuilder: function(parent, idPrefix, name, uniqueIndex) {
+                        var id = [idPrefix, name, uniqueIndex].join('_');
+                        var $wrapper = $([
+                            '<textarea class="text high" id="" name=""></textarea>'
+                        ].join("\n"));
+                        $wrapper.attr('id', id).attr('name', id);
+                        $(parent).append($wrapper);
+
+                        var manager = this.tinymce = new MT.EditorManager(id);
+                        // tinymce.init({selector: '#' + id});
+                        return $wrapper.get(0);
+                    },
+                    customGetter: function(idPrefix, name, uniqueIndex) {
+                        var id = [idPrefix, name, uniqueIndex].join('_');
+                        return tinymce.get(id).getContent();
+                    },
+                    customSetter: function(idPrefix, name, uniqueIndex, value) {
+                        var id = [idPrefix, name, uniqueIndex].join('_');
+                        $('#'+id).val(value);
+                    }
+                };
+            },
             'mt-asset': function(params) {
                 // Build custom column
                 return {
@@ -277,7 +303,14 @@
             initRows: 3,
             rowDragging: true,
             hideButtons: { moveUp: true, moveDown: true },
-            i18n: $.mtAppendGrid.i18n
+            i18n: $.mtAppendGrid.i18n,
+            afterRowDragged: function(tbWhole, tbRowIndex) {
+                if ( $.mtAppendGrid.afterRowDraggedCallbacks ) {
+                    $.each($.mtAppendGrid.afterRowDraggedCallbacks, function(i, c) {
+                        c();
+                    });
+                }
+            }
         },
         _init: function(options) {
             var opts = $.extend(this.defaults, $.mtAppendGrid.defaultOptions, this.options, $.mtAppendGrid.forceOptions),
@@ -387,6 +420,17 @@
             // Data
             var value = this.jqValues ? this.jqValues.val() : '';
             opts.initData = this.jsonToGridArray(value);
+
+            // Redraw tinymce after dragged
+            opts.afterRowDragged = function(caller, rowIndex, uniqueIndex) {
+                $(caller).find('tbody.ui-widget-content>tr').eq(rowIndex).find('.mceEditor[role=application]').each(function() {
+                    var id = $(this).attr('id');
+                    id = id.replace(/_parent$/, '');
+                    tinymce.EditorManager.execCommand('mceRemoveControl', true, id);
+                    tinymce.EditorManager.execCommand('mceAddControl', true, id);
+                });
+                return true;
+            };
 
             // Build options
             this.jqGrid = this.jqTable.appendGrid(opts);
