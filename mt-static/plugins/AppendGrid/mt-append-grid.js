@@ -421,6 +421,17 @@
             var value = this.jqValues ? this.jqValues.val() : '';
             opts.initData = this.jsonToGridArray(value);
 
+            // Redraw tinymce after dragged
+            opts.afterRowDragged = function(caller, rowIndex, uniqueIndex) {
+                $(caller).find('tbody.ui-widget-content>tr').eq(rowIndex).find('.mceEditor[role=application]').each(function() {
+                    var id = $(this).attr('id');
+                    id = id.replace(/_parent$/, '');
+                    tinymce.EditorManager.execCommand('mceRemoveControl', true, id);
+                    tinymce.EditorManager.execCommand('mceAddControl', true, id);
+                });
+                return true;
+            };
+
             // Build options
             this.jqGrid = this.jqTable.appendGrid(opts);
 
